@@ -1,12 +1,10 @@
-# React Project Starter
+# Portfolio
 
-A reusable React + TypeScript + Vite starter.
+Created from React Project Starter. See [STARTER.md](./STARTER.md) for all commands.
 
 ```bash
-npm install
-npm run new -- my-app        # create a new project from this starter
+npm run dev              # start dev server
+npm run check            # typecheck + lint + format + tests
+npm run build            # production build
+npm run starter:update   # pull in the latest starter changes
 ```
-
-In a project: `npm run starter:update` pulls in the latest starter changes.
-
-Full docs: [STARTER.md](./STARTER.md)
