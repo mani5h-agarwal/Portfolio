@@ -1,0 +1,199 @@
+% The résumé shown in the portfolio's Résumé app. Build it with `npm run resume`, which writes
+% public/resume.pdf. Phone number and email are left out on purpose: this file and the PDF are
+% public (on the site and on GitHub).
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+% pdfLaTeX only (XeTeX, which Tectonic uses, writes searchable text by itself)
+\ifdefined\pdfgentounicode\input{glyphtounicode}\fi
+
+\usepackage{fontawesome5}
+\usepackage[hidelinks]{hyperref} % hides ugly boxes but keeps links clickable
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.55in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\ifdefined\pdfgentounicode\pdfgentounicode=1\fi
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Manish Agarwal} \\ \vspace{1pt}
+    \small
+    \faLinkedin~\href{https://www.linkedin.com/in/manish-agarwal-34539a28a/}{\underline{LinkedIn}} \quad
+    \faGithub~\href{https://github.com/mani5h-agarwal}{\underline{GitHub}} \quad
+    \faLaptopCode~\href{https://leetcode.com/u/MANISH1233/}{\underline{LeetCode}}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {National Institute of Technology Karnataka, Surathkal}{Surathkal, Karnataka}
+      {BTech in Computer Science and Engineering | \textbf{CGPA 8.02}}{Aug 2023 – Present}
+    % \resumeSubheading
+    %   {The Vivekanand School, Delhi}{Narela, Delhi}
+    %   {CBSE - 12th Board Percentage : \textbf{90.20\%}}{Jul 2021 – Jul 2023}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Software Development Engineer Intern}{Hyderabad, India}
+      {Amazon}{May 2025 – Jul 2025}
+\resumeItemListStart
+      \resumeItem{Built a \textbf{black-box regression harness} for a rewrite of a money-critical refund library, verifying output parity with production to \textbf{4 decimal places} across \textbf{76 test cases} in 3 layers, \textbf{before deployment}.}
+      \resumeItem{Solved the blocker of logs holding only inputs and outputs: built a \textbf{propose-verify-repair generator} that reconstructs missing upstream values and keeps only test cases that \textbf{reproduce production output exactly}.}
+      \resumeItem{Integrated an \textbf{AI agent} that re-wires tests after refactors but cannot edit expected outputs; validated with an injected currency bug that the harness caught while unit tests stayed green.}
+
+\resumeItemListEnd
+  \resumeSubHeadingListEnd
+%-----------PROJECTS-----------
+\section{Projects}
+\resumeSubHeadingListStart
+
+\resumeProjectHeading
+    {\textbf{SwiftShareX}
+    $|$ \href{https://play.google.com/store/apps/details?id=com.swiftshare}{\faGooglePlay}
+    $|$ \href{https://github.com/mani5h-agarwal/SwiftShareX}{\faGithub}
+    $|$ \emph{React Native, C++/JSI, TCP Sockets, UDP Discovery}}{Jun 2025 – Dec 2026}
+    \resumeItemListStart
+        \resumeItem{Built an offline file-sharing app across \textbf{3 platforms} (Android, macOS, Windows) using \textbf{React Native} and a native \textbf{C++ TCP engine}, sharing \textbf{one UI codebase} with Electron and reaching \textbf{80 MB/s} over local Wi-Fi.}
+        \resumeItem{Architected a custom binary protocol (SWFT) streaming \textbf{256 KB chunks} through \textbf{8 MB socket buffers}, with receiver-confirmed delivery and atomic writes, so \textbf{multi-GB files} are never falsely marked sent or left corrupted.}
+        \resumeItem{Integrated \textbf{JSI} to expose a multi-threaded C++ engine directly to JavaScript, polling live progress every \textbf{250 ms} without bridge overhead, and streamed files from Android file descriptors via \textbf{JNI} without intermediate copies.}
+        \resumeItem{Implemented \textbf{UDP broadcast discovery} with a \textbf{6-message} control protocol for pairing, multi-file queues and per-file cancel, securing receivers with a peer IP allowlist and \textbf{4 MB} chunk cap.}
+    \resumeItemListEnd
+
+
+\resumeProjectHeading
+    {\textbf{SmartGalleryX} \textbar{} \href{https://github.com/mani5h-agarwal/SmartGalleryX}{\faGithub} \textbar{} \emph{PyTorch, SigLIP 2, FastAPI, React Native, SQLite}}{Jun 2026 – Nov 2026}
+    \resumeItemListStart
+        \resumeItem{Fine-tuned a \textbf{SigLIP 2 ViT-L/16} model on \textbf{146K images and 730K captions} with sigmoid contrastive loss and multi-GPU DDP, enabling natural-language search over phone photos.}
+        \resumeItem{Raised top-1 retrieval from \textbf{84.3\% to 90.1\%} on Flickr30k and \textbf{55.0\% to 64.0\%} on COCO, fitting ViT-L on 16 GB GPUs with layer-wise LR decay and gradient checkpointing.}
+        \resumeItem{Built a \textbf{stateless FastAPI} embedding server with per-GPU encoders and \textbf{int8 quantization} (\textbf{4x smaller} vectors), API-key auth and caching, embedding \textbf{30+ images/s}.}
+        \resumeItem{Developed a React Native app with an \textbf{on-device vector index} and \textbf{min-heap top-k ranking} that syncs only new or edited photos and serves repeat searches \textbf{offline}.}
+    \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+
+%
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}]
+  \small{
+    \item{
+      \textbf{Languages:} C/C++, Swift, JavaScript, Python, MySQL, HTML/CSS \\
+      \textbf{Frameworks/Libraries:} SwiftUI, React Native, React, Firebase, Tailwind CSS, NumPy, Pandas \\
+\textbf{Tools:} Xcode, Android Studio, VS Code, Git, Postman, Expo CLI, Kaggle
+    }
+  }
+\end{itemize}
+
+\section{Achievements}
+\begin{itemize}[leftmargin=0.33in]  % was 0.15in
+ \item Secured \textbf{AIR 5085} in \textit{JEE Advanced} and \textbf{AIR 2645} in \textit{JEE Main}.
+ \item Secured \textbf{1st place} out of \textbf{200+ teams} in \textit{Silicon Maze Capture the Flag}, organized by WebClub, NITK.
+ \item Achieved \textbf{2nd place} out of \textbf{120+ teams} in \textit{Code Red Capture the Flag}, hosted by IEEE, NITK.
+\end{itemize}
+\section{Extracurricular}
+\resumeSubHeadingListStart
+
+\resumeProjectHeading
+{\textbf{Frontend Lead – \underline{\href{https://acm.nitk.ac.in}{ACM NITK Website}}} $|$ \emph{React.js, UI/UX Design}}{Feb 2025 – Present}
+\resumeItemListStart
+  \resumeItem{Leading the frontend team for the official ACM NITK website, focusing on \textbf{UI/UX consistency}, \textbf{responsive design}, and \textbf{accessibility}.}
+  \resumeItem{Implemented and maintained critical React.js components, improving user interaction and performance.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%-------------------------------------------
+\end{document}

@@ -30,5 +30,3 @@ coverage
 
 !.vscode/settings.json
 
-# the résumé PDF holds personal contact details: kept local only
-public/resume.pdf
