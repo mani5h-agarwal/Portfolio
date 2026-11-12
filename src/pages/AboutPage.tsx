@@ -1,8 +1,8 @@
 export function AboutPage() {
   return (
-    <section>
+    <section className="page">
       <h1>About</h1>
-      <p>Built with React, TypeScript, Vite and React Router.</p>
+      <p>More about me is coming soon.</p>
     </section>
   )
 }

@@ -1,0 +1,1157 @@
+/* ───────────────────────── App icon ───────────────────────── */
+
+.app-icon {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+/* the artwork draws its own squircle, shading and rim (AppIcon.tsx); this is its soft shadow */
+.app-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 4% 6% rgb(0 0 0 / 0.3));
+}
+
+/* ───────────────────────── Dock (on the Mac's screen) ───────────────────────── */
+/* Sizes use cqw: percent of the laptop's width, so the Dock scales with the Mac. */
+
+.dock-wrap {
+  position: absolute;
+  left: 50%;
+  bottom: 1.3cqw;
+  z-index: 1;
+  translate: -50% 0;
+}
+
+.dock {
+  --icon: 3.9cqw;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.55cqw;
+  /* fixed shelf height: magnified icons grow up out of it instead of stretching it */
+  height: calc(var(--icon) + 1.55cqw);
+  padding: 0.7cqw 0.7cqw 0.85cqw;
+  border-radius: 1.6cqw;
+  /* no backdrop-filter on the Mac's screen: Chrome draws blurred glass flat, ignoring the tilt */
+  background: rgb(255 255 255 / 0.22);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.22),
+    0 1cqw 3cqw rgb(0 0 0 / 0.25);
+}
+
+.dock-item {
+  position: relative;
+  flex: none;
+  width: calc(var(--icon) * var(--mag, 1));
+  /* keeps its resting height: the icon grows upward, overflowing the shelf like macOS */
+  height: var(--icon);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  /* animate only the shrink-back when the cursor leaves; while hovering it follows instantly */
+  transition: width 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dock.is-magnifying .dock-item {
+  transition: none;
+}
+
+.dock-item .app-icon {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+/* the little "app is open" dot, in the shelf just under the icon */
+.dock-dot {
+  position: absolute;
+  left: 50%;
+  bottom: -0.55cqw;
+  width: 0.32cqw;
+  height: 0.32cqw;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.dock-dot.is-on {
+  background: rgb(255 255 255 / 0.85);
+}
+
+/* name bubble above the icon on hover */
+.dock-label {
+  position: absolute;
+  /* above the (possibly magnified) icon */
+  bottom: calc(var(--icon) * var(--mag, 1) + 0.6cqw);
+  left: 50%;
+  translate: -50% 0.3cqw;
+  padding: 0.35cqw 1.1cqw;
+  /* a pill of liquid glass, like the volume indicator and Spotlight */
+  border-radius: 999px;
+  font-size: 0.95cqw;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 0.06cqw 0.2cqw rgb(0 0 0 / 0.3);
+  background: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 0.3) 0%,
+    rgb(255 255 255 / 0.14) 55%,
+    rgb(255 255 255 / 0.2) 100%
+  );
+  box-shadow:
+    inset 0 0 0 0.06cqw rgb(255 255 255 / 0.45),
+    inset 0.12cqw 0.15cqw 0.3cqw rgb(255 255 255 / 0.3),
+    inset -0.1cqw -0.15cqw 0.3cqw rgb(255 255 255 / 0.15),
+    0 0.4cqw 1.2cqw rgb(40 20 90 / 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s,
+    translate 0.15s;
+}
+
+.dock-item:hover .dock-label,
+.dock-item:focus-visible .dock-label {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.dock-item:focus-visible {
+  outline: none;
+}
+
+.dock-item:focus-visible .app-icon {
+  outline: 2px solid #5dff8f;
+  outline-offset: 2px;
+}
+
+/* launch bounce, like macOS */
+.dock-item.is-launching .app-icon {
+  animation: dock-bounce 0.38s cubic-bezier(0.3, 0, 0.3, 1);
+}
+
+@keyframes dock-bounce {
+  45% {
+    transform: translateY(-1.4cqw);
+  }
+}
+
+.dock-divider {
+  align-self: stretch;
+  width: 1px;
+  margin: 0.3cqw 0.2cqw 0.9cqw;
+  background: rgb(255 255 255 / 0.25);
+}
+
+/* ───────────────────────── Spotlight (on the Mac's screen) ───────────────────────── */
+
+/* Spotlight looks and sits like the brightness/volume indicator (.hud in macbook.css): a capsule of
+   liquid glass above the Dock, leaning like the screen (wider at the top). No backdrop-filter on the
+   Mac's screen: Chrome draws blurred glass flat, ignoring the tilt. */
+.spotlight {
+  position: absolute;
+  left: 50%;
+  bottom: 12.5cqw;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  /* the shared glass pill (defined on .mb-scene), exactly like the brightness/volume indicator */
+  gap: var(--pill-gap);
+  width: var(--pill-w);
+  height: var(--pill-h);
+  padding: var(--pill-pad);
+  border-radius: 999px;
+  color: #fff;
+  background: var(--pill-bg);
+  box-shadow: var(--pill-shadow);
+  text-shadow: var(--pill-text-shadow);
+  /* centring, the small rise in and the tilt are all one transform: Safari draws a 3D-tilted
+     box without its separate translate/scale, which put the pill half its width off-centre */
+  transform: translate(-50%, 0.6cqw) scale(0.96) perspective(40cqw) rotateX(-14deg);
+  transform-origin: 50% 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.spotlight.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1) perspective(40cqw) rotateX(-14deg);
+}
+
+.spotlight-icon {
+  flex: none;
+  width: var(--pill-icon);
+  height: var(--pill-icon);
+  color: #fff;
+  filter: drop-shadow(0 0.1cqw 0.25cqw rgb(0 0 0 / 0.25));
+}
+
+.spotlight-text {
+  display: flex;
+  align-items: center;
+  font-size: var(--pill-text);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: pre;
+}
+
+.spotlight-rest {
+  color: rgb(255 255 255 / 0.55);
+  /* shown like selected text, as in real Spotlight */
+  border-radius: 0.3cqw;
+  background: rgb(255 255 255 / 0.14);
+}
+
+/* the best match's icon, on the right */
+.spotlight-match {
+  flex: none;
+  width: 3cqw;
+  margin-left: auto;
+}
+
+.spotlight-placeholder {
+  margin-left: 0.2cqw; /* clear of the cursor in front of it */
+  color: rgb(255 255 255 / 0.65);
+}
+
+.spotlight-caret {
+  width: 0.14cqw;
+  height: 2.2cqw;
+  margin: 0 -0.07cqw;
+  background: #fff;
+  animation: spotlight-blink 1s steps(1) infinite;
+}
+
+@keyframes spotlight-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ───────────────────────── Full-screen app ───────────────────────── */
+
+/* Covers the page while an app is open; the window and the pet sit inside it. */
+.fs-app {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* the app's window, on the app's own background (not the wallpaper). It pours out of its Dock
+   icon (genie.ts) and fills the page, rounded like the Mac's screen. */
+.fs-window {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #e5e5ea;
+  background: linear-gradient(180deg, #1f1f24 0%, #16161a 100%);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06) inset;
+  pointer-events: auto;
+  outline: none; /* it takes keyboard focus when it opens; no ring around the whole window */
+}
+
+/* the macOS menu bar */
+.fs-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  height: 44px;
+  padding: 0 16px;
+  background: rgb(20 20 24 / 0.75);
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.fs-title {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  translate: -50% 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f2f2f7;
+}
+
+.fs-title-icon {
+  width: 20px;
+}
+
+/* "esc to close" hint, top right */
+.fs-esc {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.75rem;
+  color: rgb(235 235 245 / 0.45);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.fs-esc kbd {
+  padding: 2px 7px;
+  border-radius: 6px;
+  font:
+    600 0.7rem/1.4 ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: rgb(235 235 245 / 0.75);
+  background: rgb(255 255 255 / 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    0 1px 0 rgb(0 0 0 / 0.4);
+}
+
+.fs-esc:hover {
+  color: rgb(235 235 245 / 0.8);
+}
+
+/* no Esc key on touch screens */
+@media (hover: none) {
+  .fs-esc {
+    display: none;
+  }
+}
+
+.fs-body {
+  flex: 1;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+/* the app's content sits in a comfortable reading column */
+.fs-body .mac-content {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vh, 56px) clamp(20px, 4vw, 40px) 64px;
+}
+
+.fs-app[data-app='terminal'] .fs-body {
+  background: rgb(8 8 10 / 0.92);
+}
+
+.fs-app[data-app='terminal'] .mac-content {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-width: none;
+  /* fills the window, so a click anywhere in it puts the cursor in the prompt */
+  min-height: 100%;
+  padding: 18px 22px;
+}
+
+.fs-app[data-app='terminal'] .terminal {
+  flex: 1;
+}
+
+.traffic {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.tl {
+  display: grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.25);
+}
+
+/* the ×, − and ↖↘ symbols: hidden until the pointer is over the buttons, like on a Mac */
+.tl svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--tl-glyph);
+  stroke-width: 1.15;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.tl svg .tl-fill {
+  fill: var(--tl-glyph);
+  stroke: none;
+}
+
+.traffic:hover .tl svg,
+.traffic:focus-within .tl svg {
+  opacity: 1;
+}
+
+.tl-close {
+  --tl-glyph: #4d0000;
+  background: #ff5f57;
+}
+
+.tl-min {
+  --tl-glyph: #995700;
+  background: #febc2e;
+}
+
+.tl-zoom {
+  --tl-glyph: #006500;
+  background: #28c840;
+}
+
+.tl:focus-visible {
+  outline: 2px solid #5dff8f;
+  outline-offset: 2px;
+}
+
+.mac-content {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ───────────────────────── App content ───────────────────────── */
+
+.mac-content h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.mac-content h3 {
+  margin: 0 0 6px;
+  font-size: 1.02rem;
+  color: #fff;
+}
+
+.mac-content p {
+  margin: 0 0 14px;
+}
+
+.mac-content a {
+  color: #5dff8f;
+}
+
+.mac-content code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 0.85em;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.muted {
+  color: #8e8e93;
+}
+
+.accent {
+  color: #7fd99a;
+}
+
+/* placeholder content still to be replaced, shown subtly so it's easy to spot */
+.example {
+  color: #8e8e93;
+  font-style: italic;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: #d1d1d6;
+  background: rgb(255 255 255 / 0.07);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+/* About */
+.about-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.about-head p {
+  margin: 4px 0 0;
+}
+
+.about-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #1f3d2b, #0a84ff);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.15);
+}
+
+.about-facts {
+  display: grid;
+  gap: 1px;
+  margin: 20px 0 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.06);
+}
+
+.about-facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  background: rgb(28 28 32 / 0.9);
+}
+
+.about-facts dt {
+  color: #8e8e93;
+}
+
+.about-facts dd {
+  margin: 0;
+  text-align: right;
+}
+
+/* Experience */
+.timeline {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 22px;
+  list-style: none;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 4px;
+  width: 1px;
+  background: linear-gradient(#5dff8f, rgb(255 255 255 / 0.08));
+}
+
+.timeline > li {
+  position: relative;
+  padding-bottom: 26px;
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 6px;
+  left: -22px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #5dff8f;
+  box-shadow: 0 0 0 4px rgb(93 255 143 / 0.15);
+}
+
+.timeline-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 2px;
+  font-size: 0.8rem;
+  color: #8e8e93;
+}
+
+.timeline ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.timeline ul li {
+  margin-bottom: 4px;
+}
+
+/* Projects */
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.project {
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.04);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.project:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 0 1px rgb(93 255 143 / 0.35),
+    0 12px 30px rgb(0 0 0 / 0.35);
+}
+
+.project-art {
+  display: grid;
+  place-items: center;
+  height: 112px;
+}
+
+.project-art span {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: rgb(255 255 255 / 0.9);
+  text-shadow: 0 4px 20px rgb(0 0 0 / 0.3);
+}
+
+.project-body {
+  padding: 14px 16px 16px;
+}
+
+.project-body p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #aeaeb2;
+}
+
+.project-links {
+  display: flex;
+  gap: 14px;
+  margin-top: 12px;
+  font-size: 0.88rem;
+}
+
+/* Skills */
+.skills section + section {
+  margin-top: 20px;
+}
+
+/* Contact */
+.contact-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.contact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #e5e5ea !important;
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  transition: background 0.2s;
+}
+
+.contact-row:hover {
+  background: rgb(93 255 143 / 0.1);
+}
+
+.contact-row span {
+  color: #8e8e93;
+}
+
+/* Résumé */
+.resume {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* the PDF viewer fills the window, edge to edge */
+.fs-app[data-app='resume'] .fs-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.fs-app[data-app='resume'] .mac-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.resume.is-viewer {
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.resume.is-viewer {
+  position: relative;
+}
+
+/* a small round download button over the PDF's top-right corner */
+.resume-download {
+  position: absolute;
+  top: 14px;
+  right: 22px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #fff !important; /* not the link green */
+  background: rgb(28 28 32 / 0.8);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.12),
+    0 4px 14px rgb(0 0 0 / 0.35);
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+
+.resume-download:hover {
+  background: rgb(48 48 54 / 0.9);
+  transform: scale(1.06);
+}
+
+.resume-download svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.resume-pdf {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #525659; /* the PDF viewer's own grey while it loads */
+}
+
+.resume .example {
+  max-width: 34ch;
+  margin-top: 12px;
+}
+
+.button {
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #e5e5ea !important;
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
+}
+
+.button.primary {
+  color: #04140a !important;
+  background: #5dff8f;
+}
+
+/* Terminal */
+.terminal {
+  min-height: 100%;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #d1d1d6;
+  white-space: pre-wrap;
+  cursor: text;
+}
+
+.term-cmd {
+  color: #fff;
+}
+
+.term-input {
+  display: flex;
+  gap: 8px;
+}
+
+.term-prompt,
+.term-input label {
+  color: #5dff8f;
+  white-space: nowrap;
+}
+
+.term-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  font: inherit;
+  color: #fff;
+  background: transparent;
+  caret-color: #5dff8f;
+}
+
+/* ───────────────────────── Small screens ───────────────────────── */
+
+@media (max-width: 640px) {
+  /* the Mac is small on a phone: give the Dock bigger, tappable icons */
+  .dock {
+    --icon: 7.6cqw;
+    gap: 1cqw;
+    padding: 1cqw 1.2cqw;
+    border-radius: 3cqw;
+  }
+
+  .dock-label {
+    display: none;
+  }
+
+  /* bigger traffic lights so close is easy to tap */
+  .traffic {
+    gap: 12px;
+  }
+
+  .tl {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock-item,
+  .fs-app,
+  .spotlight {
+    transition: none;
+  }
+
+  .dock-item.is-launching .app-icon {
+    animation: none;
+  }
+}
+
+/* markers around the screen's outline (ScreenOutline.tsx): invisible, just measured */
+.screen-outline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.screen-outline > i {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* ───────────────────────── Wallpaper ───────────────────────── */
+
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* The sparkles sit over the wallpaper on a box laid out like its picture ("xMidYMax slice":
+   1600×1000, covering the screen, anchored to the bottom centre). */
+.wp-sparkles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: size;
+  pointer-events: none;
+}
+
+.wp-sparkles-frame {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: max(100cqw, 160cqh);
+  aspect-ratio: 1600 / 1000;
+  translate: -50% 0;
+}
+
+/* each twinkles on its own beat; transform and opacity only, so it runs on the GPU */
+.wp-sparkle {
+  position: absolute;
+  display: block;
+  aspect-ratio: 1;
+  overflow: visible;
+  animation: wp-twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes wp-twinkle {
+  0%,
+  100% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.6);
+  }
+}
+
+/* ───────────────────────── Buddy ───────────────────────── */
+
+.buddy {
+  /* its own layer: it moves every frame, and repainting it shouldn't repaint the whole screen */
+  will-change: transform;
+  position: absolute;
+  left: 6.5cqw;
+  bottom: 0.4cqw;
+  z-index: 1;
+  width: 13cqw;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.buddy-hit {
+  pointer-events: visiblePainted;
+  cursor: pointer;
+}
+
+.buddy-shadow {
+  fill: rgb(40 20 80 / 0.28);
+}
+
+.buddy-hop,
+.buddy-breathe,
+.buddy-wobble {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* breathing: a slow, gentle squash and stretch */
+.buddy-breathe {
+  animation: buddy-breathe 3.4s ease-in-out infinite;
+}
+
+.buddy[data-mood='asleep'] .buddy-breathe {
+  animation-duration: 5s;
+}
+
+@keyframes buddy-breathe {
+  50% {
+    transform: scale(1.03, 0.97);
+  }
+}
+
+/* dizzy: wobbles about */
+.buddy[data-mood='dizzy'] .buddy-wobble {
+  animation: buddy-wobble 0.7s ease-in-out infinite;
+}
+
+@keyframes buddy-wobble {
+  0%,
+  100% {
+    transform: rotate(-7deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+}
+
+.buddy-cheek {
+  fill: #ffa3c4;
+  opacity: 0.55;
+  transition: opacity 0.25s;
+}
+
+.buddy[data-mood='happy'] .buddy-cheek,
+.buddy[data-mood='near'] .buddy-cheek,
+.buddy[data-mood='dizzy'] .buddy-cheek {
+  opacity: 1;
+}
+
+/* pupils: bigger when excited, small and shocked when surprised */
+.buddy-pupil-size {
+  transition: transform 0.2s ease;
+}
+
+.buddy[data-mood='near'] .buddy-pupil-size {
+  transform: scale(1.18);
+}
+
+.buddy[data-mood='wow'] .buddy-pupil-size,
+.buddy[data-mood='startled'] .buddy-pupil-size {
+  transform: scale(0.6);
+}
+
+.buddy-sparkle {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.buddy[data-mood='near'] .buddy-sparkle {
+  opacity: 1;
+}
+
+/* the eye variants: open / spiral / ^ / ‿ */
+.buddy-eye-open,
+.buddy-spiral,
+.buddy-arc {
+  transition: opacity 0.12s;
+}
+
+.buddy-spiral,
+.buddy-arc {
+  opacity: 0;
+}
+
+.buddy[data-mood='happy'] .buddy-eye-open,
+.buddy[data-mood='asleep'] .buddy-eye-open,
+.buddy[data-mood='dizzy'] .buddy-eye-open {
+  opacity: 0;
+}
+
+.buddy[data-mood='happy'] .buddy-happy-eye,
+.buddy[data-mood='asleep'] .buddy-closed-eye,
+.buddy[data-mood='dizzy'] .buddy-spiral {
+  opacity: 1;
+}
+
+.buddy[data-mood='dizzy'] .buddy-spiral {
+  animation: buddy-spin 0.6s linear infinite;
+}
+
+@keyframes buddy-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.buddy-arc {
+  fill: none;
+  stroke: #2a2140;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* mouths */
+.buddy-mouth {
+  opacity: 0;
+  transition: opacity 0.15s;
+  fill: none;
+  stroke: #2a2140;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.m-grin,
+.m-wow {
+  fill: #6b2b55;
+  stroke-width: 1.4;
+}
+
+.buddy[data-mood='idle'] .m-cat,
+.buddy[data-mood='typing'] .m-cat,
+.buddy[data-mood='near'] .m-grin,
+.buddy[data-mood='happy'] .m-grin,
+.buddy[data-mood='wow'] .m-wow,
+.buddy[data-mood='startled'] .m-wow,
+.buddy[data-mood='dizzy'] .m-wavy,
+.buddy[data-mood='sleepy'] .m-sleep,
+.buddy[data-mood='asleep'] .m-sleep {
+  opacity: 1;
+}
+
+/* hearts and "!" pop up (animated from Buddy.tsx) */
+.buddy-heart {
+  fill: #ff5c8a;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.buddy-bang {
+  opacity: 0;
+  fill: #7c3aed;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  paint-order: stroke;
+  font:
+    900 40px/1 system-ui,
+    sans-serif;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* z z, floating up while it sleeps */
+.buddy-z {
+  opacity: 0;
+  fill: #7c3aed;
+  stroke: #fff;
+  stroke-width: 1.2px;
+  paint-order: stroke;
+  font:
+    800 22px/1 system-ui,
+    sans-serif;
+  transition: opacity 0.4s;
+}
+
+.buddy[data-mood='asleep'] .buddy-z {
+  opacity: 1;
+}
+
+.buddy-z text {
+  animation: buddy-z 2.4s ease-in-out infinite;
+}
+
+.buddy-z text + text {
+  animation-delay: 1.2s;
+}
+
+@keyframes buddy-z {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .buddy-breathe,
+  .buddy-z text,
+  .buddy[data-mood='dizzy'] .buddy-wobble,
+  .buddy[data-mood='dizzy'] .buddy-spiral,
+  .wp-sparkle {
+    animation: none;
+  }
+}

@@ -9,7 +9,7 @@ export function ErrorPage() {
       : 'Unknown error'
 
   return (
-    <section className="main">
+    <section className="page">
       <h1>Something went wrong</h1>
       <pre>{message}</pre>
     </section>
