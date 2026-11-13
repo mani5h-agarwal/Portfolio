@@ -64,42 +64,6 @@ kbd {
   white-space: nowrap;
 }
 
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-  padding: 0 clamp(16px, 4vw, 32px);
-  background: rgb(10 10 12 / 0.72);
-  backdrop-filter: saturate(1.6) blur(18px);
-  border-bottom: 1px solid var(--border);
-}
-
-.brand {
-  font-weight: 600;
-  color: var(--fg);
-  text-decoration: none;
-}
-
-.nav {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.nav a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 0.95rem;
-}
-
-.nav a.active,
-.nav a:hover {
-  color: var(--fg);
-}
-
 .page {
   max-width: 960px;
   margin: 0 auto;

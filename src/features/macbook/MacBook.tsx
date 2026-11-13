@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode, Ref } from 'react'
-import { Edges } from './Edges'
+import { Edges, type Radii } from './Edges'
 import { Key } from './Key'
 import { ARROWS, ROWS, type KeyDef } from './keys'
 import type { Finish } from './useSettings'
@@ -9,6 +9,9 @@ export const DECK_H = 75.14
 export const LID_H = DECK_H
 const DECK_T = 2 // body thickness
 const LID_T = 0.55 // lid thickness
+// corner radii (cqw), made once: a new array each render would redraw the memoised edges
+const LID_RADII: Radii = [5.5, 5.5, 3, 3]
+const DECK_RADII: Radii = [3, 3, 5.5, 5.5]
 
 interface MacBookProps {
   pressed: ReadonlySet<string>
@@ -90,7 +93,7 @@ export function MacBook({
             </div>
             {/* outside of the lid: aluminium back and edges, seen when it's closed */}
             <div className="mb-lid-back" aria-hidden="true" />
-            <Edges width={100} height={LID_H} radii={[5.5, 5.5, 3, 3]} depth={LID_T} />
+            <Edges width={100} height={LID_H} radii={LID_RADII} depth={LID_T} />
           </div>
 
           <div className="mb-deck">
@@ -130,7 +133,7 @@ export function MacBook({
             <Edges
               width={100}
               height={DECK_H}
-              radii={[3, 3, 5.5, 5.5]}
+              radii={DECK_RADII}
               depth={DECK_T}
               bottomRadius={DECK_T * 0.55}
             />

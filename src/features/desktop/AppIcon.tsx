@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react'
+import { memo, useId, type ReactNode } from 'react'
 
 export type IconId =
   | 'about'
@@ -293,7 +293,7 @@ const ICONS: Record<IconId, Art> = {
 }
 
 /** A macOS-style app icon. Size it with the `.app-icon` class (it fills its box). */
-export function AppIcon({ id }: { id: IconId }) {
+export const AppIcon = memo(function AppIcon({ id }: { id: IconId }) {
   const icon = ICONS[id]
   const uid = `ai${useId().replace(/[^a-zA-Z0-9]/g, '')}`
   return (
@@ -321,4 +321,4 @@ export function AppIcon({ id }: { id: IconId }) {
       </svg>
     </span>
   )
-}
+})

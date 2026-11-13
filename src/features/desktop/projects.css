@@ -1,0 +1,1289 @@
+/* ─────────────── Projects (Projects.tsx): a sidebar, the story, and an iPhone ─────────────── */
+
+.fs-app[data-app='projects'] .fs-body {
+  display: flex;
+  overflow: hidden;
+}
+
+.fs-app[data-app='projects'] .mac-content {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pj {
+  display: grid;
+  grid-template-columns: clamp(230px, 18vw, 280px) minmax(0, 1fr);
+  height: 100%;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+/* ── the projects, in a floating glass sidebar (as in the other apps) ── */
+
+.pj-side {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 10px 10px;
+  padding: 10px 8px;
+  overflow: auto;
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.045);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+}
+
+.pj-side h4 {
+  margin: 2px 10px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--mac-secondary);
+}
+
+.pj-side ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pj-side li {
+  min-width: 0;
+}
+
+.pj-side button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  text-align: left;
+  color: var(--mac-label);
+  background: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pj-side button:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+
+.pj-side button[aria-current] {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.pj-side button span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pj-side strong {
+  overflow: hidden;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pj-side small {
+  font-size: 0.72rem;
+  color: var(--mac-secondary);
+}
+
+.pj-side .pj-more {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: auto 10px 4px;
+  padding-top: 12px;
+  font-size: 0.78rem;
+  text-decoration: none;
+  color: var(--mac-secondary);
+}
+
+.pj-side .pj-more svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pj-side .pj-more:hover {
+  color: var(--mac-label);
+}
+
+/* an app icon: a rounded square, like on the Home Screen */
+.pj-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 23%;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.18);
+}
+
+.pj-icon img,
+.pj-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── the main pane: the story on the left, the iPhone on the right ── */
+
+.pj-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: clamp(16px, 3vw, 48px);
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(16px, 3vh, 32px) clamp(18px, 3vw, 44px);
+}
+
+.pj-info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vh, 20px);
+  min-width: 0;
+  min-height: 0;
+  max-width: 620px;
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+.pj-info > * {
+  animation: pj-rise 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.pj-info > :nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.pj-info > :nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+@keyframes pj-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.pj-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.pj-head h2 {
+  margin: 0 !important;
+  font-size: clamp(1.5rem, 3.4vh, 2rem) !important;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.pj-tagline {
+  margin: 3px 0 0;
+  font-size: 0.95rem;
+  color: var(--mac-label);
+}
+
+.pj-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+  color: var(--mac-secondary);
+}
+
+.pj-meta > span:first-child {
+  margin-right: 4px;
+}
+
+.pj-platform {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 500;
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.pj-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0 10px;
+}
+
+.pj .pj-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 8px 13px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.08);
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+
+.pj .pj-links a svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pj .pj-links a[data-primary] {
+  color: #fff;
+  background: var(--accent);
+}
+
+.pj .pj-links a:hover {
+  background: rgb(255 255 255 / 0.16);
+  transform: translateY(-1px);
+}
+
+.pj .pj-links a[data-primary]:hover {
+  background: color-mix(in srgb, var(--accent) 85%, #fff);
+}
+
+/* a macOS segmented control, its thumb sliding to the chosen tab */
+.pj-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--tabs), 1fr);
+  align-self: flex-start;
+  width: 360px;
+  max-width: 100%;
+  padding: 2px;
+  border-radius: 9px;
+  background: rgb(255 255 255 / 0.07);
+}
+
+.pj-tabs button {
+  position: relative;
+  z-index: 1;
+  padding: 5px 0;
+  border: 0;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--mac-secondary);
+  background: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.pj-tabs button[aria-selected='true'] {
+  color: #fff;
+}
+
+.pj-tabs-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc((100% - 4px) / var(--tabs));
+  transform: translateX(calc(var(--at) * 100%));
+  border-radius: 7px;
+  background: rgb(255 255 255 / 0.16);
+  transition: transform 0.35s cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+
+.pj-tab {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2.2vh, 22px);
+}
+
+.pj-desc {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.7vh, 0.98rem);
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.72);
+  animation: pj-rise 0.45s ease-out both;
+}
+
+/* three big numbers */
+.pj-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.pj-stats div {
+  display: grid;
+  gap: 4px;
+  padding: clamp(10px, 1.6vh, 16px) 14px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 0.5px var(--mac-separator);
+  animation: pj-rise 0.45s ease-out calc(0.08s + var(--i) * 0.07s) both;
+}
+
+.pj-stats dt {
+  font-size: clamp(1.3rem, 3.2vh, 1.8rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.pj-stats dd {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--mac-secondary);
+}
+
+.pj-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pj-tech li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 0.5px var(--mac-separator);
+  animation: pj-chip 0.45s cubic-bezier(0.3, 1.5, 0.5, 1) calc(0.2s + var(--i) * 0.04s) both;
+}
+
+.pj-tech li:has(img) {
+  padding-left: 8px;
+}
+
+.pj-tech img {
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes pj-chip {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+.pj-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pj-points li {
+  position: relative;
+  padding-left: 20px;
+  font-size: clamp(0.84rem, 1.65vh, 0.94rem);
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.68);
+  animation: pj-rise 0.45s ease-out calc(var(--i) * 0.07s) both;
+}
+
+.pj-points li::before {
+  content: '';
+  position: absolute;
+  top: 0.62em;
+  left: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.pj-points b {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ── the stage: the iPhone, and the caption under it ── */
+
+.pj-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2vh, 20px);
+  min-width: 0;
+  min-height: 0;
+}
+
+/* a new project's phone swings round into place */
+.pj-phone {
+  perspective: 1600px;
+  animation: pj-phone-in 0.8s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+
+@keyframes pj-phone-in {
+  from {
+    opacity: 0;
+    transform: perspective(1200px) rotateY(-40deg) translateX(40px) scale(0.92);
+  }
+}
+
+.pj-caption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pj-caption > div {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  min-width: 220px;
+}
+
+.pj-caption p {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--mac-label);
+  animation: pj-rise 0.35s ease-out both;
+}
+
+.pj-caption > button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0 0 2px;
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.08);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pj-caption > button:hover {
+  background: rgb(255 255 255 / 0.16);
+}
+
+/* page dots, the current one stretched into a pill */
+.pj-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.pj-dots button {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.25);
+  cursor: pointer;
+  transition:
+    width 0.3s cubic-bezier(0.3, 1.3, 0.5, 1),
+    background 0.3s;
+}
+
+.pj-dots button[aria-current] {
+  width: 20px;
+  background: var(--accent);
+}
+
+/* a desktop project gets more room for its landscape window */
+.pj-main[data-device='mac'] {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.pj-main[data-device='mac'] .pj-phone {
+  width: 100%;
+}
+
+/* ─────────────── A Safari window (MacWindow.tsx) ─────────────── */
+
+.macwin {
+  width: min(100%, calc((100vh - 250px) * 1.6), 900px);
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #2b2b2b;
+  box-shadow:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.18),
+    0 0 0 0.5px rgb(0 0 0 / 0.6);
+  transform: rotateX(calc(var(--rx, 0deg) * 0.5)) rotateY(calc(var(--ry, 0deg) * 0.5));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.macwin-bar {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 16px;
+  height: 40px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgb(0 0 0 / 0.5);
+}
+
+.macwin-lights {
+  display: flex;
+  gap: 8px;
+}
+
+.macwin-lights i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.macwin-lights i:nth-child(2) {
+  background: #febc2e;
+}
+
+.macwin-lights i:nth-child(3) {
+  background: #28c840;
+}
+
+.macwin-nav {
+  display: flex;
+  gap: 10px;
+  color: rgb(255 255 255 / 0.4);
+}
+
+.macwin-nav svg,
+.macwin-address svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.macwin-address {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  justify-self: center;
+  width: min(100%, 320px);
+  height: 26px;
+  margin-right: 80px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.macwin-address svg {
+  width: 11px;
+  height: 11px;
+  color: var(--mac-secondary);
+}
+
+/* the page: screenshots of the site, side by side, sliding */
+.macwin-page {
+  position: relative;
+  aspect-ratio: 1440 / 900;
+  overflow: hidden;
+  background: #000;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.macwin-page:active {
+  cursor: grabbing;
+}
+
+.macwin-page img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.6s cubic-bezier(0.3, 0.8, 0.2, 1);
+}
+
+.macwin-page img[data-near] {
+  visibility: visible;
+}
+
+.macwin-page[data-dragging] img {
+  transition: none;
+}
+
+/* ─────────────── iPhone 17 Pro (IPhone.tsx), drawn in CSS ───────────────
+   Everything is sized in em, where 1em is 1% of the phone's height. */
+
+.iphone {
+  --h: clamp(380px, calc(100vh - 230px), 680px);
+  position: relative;
+  width: calc(var(--h) * 0.482);
+  height: var(--h);
+  font-size: calc(var(--h) / 100);
+  border-radius: 7.2em;
+  /* titanium: a brushed edge that catches the light */
+  background: linear-gradient(
+    150deg,
+    #6b6b70 0%,
+    #2c2c2f 18%,
+    #1c1c1e 50%,
+    #2c2c2f 82%,
+    #5a5a5f 100%
+  );
+  padding: 0.4em;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
+  touch-action: pan-y;
+}
+
+/* the black glass around the screen */
+.ip-body {
+  height: 100%;
+  padding: 0.55em;
+  border-radius: 6.8em;
+  background: #050505;
+  box-shadow: inset 0 0 0 0.25em #0c0c0d;
+}
+
+.ip-screen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 6.25em;
+  background: #000;
+  cursor: grab;
+  user-select: none;
+  /* the corners clip cleanly in Safari */
+  isolation: isolate;
+}
+
+.ip-screen:active {
+  cursor: grabbing;
+}
+
+/* the side buttons */
+.ip-btn {
+  position: absolute;
+  width: 0.55em;
+  border-radius: 0.4em;
+  background: linear-gradient(90deg, #2a2a2d, #6a6a6f, #2a2a2d);
+}
+
+.ip-action,
+.ip-vol-up,
+.ip-vol-down {
+  left: -0.42em;
+}
+
+.ip-action {
+  top: 16%;
+  height: 4.2em;
+}
+
+.ip-vol-up {
+  top: 24%;
+  height: 7.6em;
+}
+
+.ip-vol-down {
+  top: 33%;
+  height: 7.6em;
+}
+
+.ip-power {
+  right: -0.42em;
+  top: 25%;
+  height: 11em;
+}
+
+.ip-camera {
+  right: -0.32em;
+  top: 58%;
+  height: 7em;
+  width: 0.4em;
+}
+
+/* the screens, side by side, sliding */
+.ip-track {
+  position: relative;
+  height: 100%;
+}
+
+.ip-track[data-dragging] .ip-shot {
+  transition: none;
+}
+
+/* a screenshot under the status bar: the strip above it carries on in its top colour */
+.ip-shot {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  transition: transform 0.6s cubic-bezier(0.3, 0.8, 0.2, 1);
+  padding-top: 5.6em;
+  box-sizing: border-box;
+  background: linear-gradient(var(--top) 0 6em, #f6f7fb 6em);
+}
+
+.ip-shot[data-near] {
+  visibility: visible;
+}
+
+.ip-shot[data-full] {
+  padding-top: 0;
+  background: #000;
+}
+
+.ip-shot img {
+  display: block;
+  width: 100%;
+  pointer-events: none;
+}
+
+.ip-shot[data-full] img {
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* iOS's status bar, either side of the Dynamic Island */
+.ip-status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5.6em;
+  padding: 0.6em 3.6em 0 4.4em;
+  box-sizing: border-box;
+  color: #fff;
+  pointer-events: none;
+  transition: color 0.3s;
+}
+
+.ip-screen[data-light-status] .ip-status {
+  color: #000;
+}
+
+.ip-time {
+  font-size: 1.75em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.ip-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.ip-status-icons svg {
+  height: 1.25em;
+  fill: currentColor;
+}
+
+.ip-island {
+  position: absolute;
+  top: 1.15em;
+  left: 50%;
+  z-index: 3;
+  width: 30%;
+  height: 3.4em;
+  border-radius: 999px;
+  background: #000;
+  translate: -50% 0;
+}
+
+.ip-home {
+  position: absolute;
+  bottom: 0.9em;
+  left: 50%;
+  z-index: 2;
+  width: 34%;
+  height: 0.55em;
+  border-radius: 999px;
+  background: #fff;
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+.ip-screen[data-light-status] .ip-home {
+  background: #111;
+}
+
+/* light on the glass */
+.ip-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    118deg,
+    rgb(255 255 255 / 0.13) 0%,
+    rgb(255 255 255 / 0.04) 28%,
+    transparent 42%
+  );
+  pointer-events: none;
+}
+
+/* the "live demo" tag under SmartGalleryX's phone */
+.pj-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--mac-secondary);
+}
+
+.pj-live i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #30d158;
+  animation: pj-live 1.6s ease-in-out infinite;
+}
+
+@keyframes pj-live {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* ─────────────── How it works (ProjectFlow.tsx) ─────────────── */
+
+.flow {
+  display: grid;
+}
+
+.flow-lanes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.flow-lane {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.flow-lane h5 {
+  margin: 0 0 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--tint);
+  animation: pj-rise 0.4s ease-out calc(var(--n) * 0.08s) both;
+}
+
+.flow-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flow-step,
+.flow-result {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: clamp(7px, 1.2vh, 10px) 12px;
+  border-radius: 12px;
+  text-align: center;
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 0.5px var(--mac-separator);
+  animation: flow-in 0.45s cubic-bezier(0.3, 1.3, 0.5, 1) calc(0.1s + var(--n) * 0.09s) both;
+}
+
+@keyframes flow-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.flow-step strong,
+.flow-result strong {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--mac-label);
+}
+
+.flow-step small,
+.flow-result small {
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: var(--mac-secondary);
+}
+
+/* a connector, with a dot travelling down it */
+.flow-link {
+  position: relative;
+  align-self: center;
+  width: 2px;
+  height: clamp(10px, 1.8vh, 16px);
+  background: color-mix(in srgb, var(--tint) 35%, transparent);
+  animation: pj-rise 0.3s ease-out calc(0.15s + var(--n) * 0.09s) both;
+}
+
+/* the dot travels the connector's height: drawn at the top of a box as tall as the connector,
+   and that box moved down by its own height (a transform, so nothing is laid out again) */
+.flow-link::after {
+  content: '';
+  position: absolute;
+  top: -2.5px;
+  left: 50%;
+  width: 5px;
+  height: 100%;
+  margin-left: -2.5px;
+  background: radial-gradient(circle at 50% 2.5px, var(--tint) 2.4px, transparent 2.6px);
+  animation: flow-dot 1.6s linear infinite;
+}
+
+@keyframes flow-dot {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* the last step's connector carries on down to where the lanes meet */
+.flow-unit:last-of-type .flow-link {
+  display: none;
+}
+
+.flow-tail {
+  flex: 1;
+  min-height: 10px;
+}
+
+.flow-merge {
+  width: 100%;
+  height: 22px;
+  overflow: visible;
+}
+
+.flow-merge path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--tint) 45%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 4 5;
+  vector-effect: non-scaling-stroke;
+  animation: flow-march 0.9s linear infinite;
+}
+
+@keyframes flow-march {
+  to {
+    stroke-dashoffset: -9;
+  }
+}
+
+.flow-result {
+  justify-self: center;
+  width: min(100%, 320px);
+  background: color-mix(in srgb, var(--tint) 18%, transparent);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--tint) 50%, transparent);
+}
+
+.flow-result strong {
+  color: #fff;
+}
+
+/* ─────────────── SmartGalleryX's screen (SmartGalleryDemo.tsx) ───────────────
+   Its own dark theme (theme.js): background #0b0d12, surfaces #191c24, accent #7e90ff. */
+
+.sg {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 6em;
+  box-sizing: border-box;
+  color: #f1f2f6;
+  background: #0b0d12;
+}
+
+.sg-top {
+  display: grid;
+  gap: 1.2em;
+  padding: 0 1.6em 1.2em;
+}
+
+.sg-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6em 0.2em 0;
+}
+
+.sg-title-row h4 {
+  margin: 0;
+  font-size: 3.1em;
+  font-weight: 700;
+  color: #f1f2f6;
+}
+
+.sg-gear {
+  width: 2.7em;
+  height: 2.7em;
+  color: #f1f2f6;
+}
+
+.sg-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.1em;
+  height: 5.3em;
+  padding: 0 1.5em;
+  border-radius: 1.5em;
+  background: #191c24;
+  transition: box-shadow 0.25s;
+}
+
+.sg-bar[data-focused] {
+  box-shadow: inset 0 0 0 0.15em #7e90ff;
+}
+
+.sg-bar > svg {
+  flex: none;
+  width: 2.2em;
+  height: 2.2em;
+  color: #9aa0af;
+}
+
+.sg-bar span {
+  flex: 1;
+  overflow: hidden;
+  font-size: 1.75em;
+  white-space: nowrap;
+}
+
+.sg-bar span[data-placeholder] {
+  color: #9aa0af;
+}
+
+.sg-clear {
+  display: grid;
+  place-items: center;
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: 50%;
+  font-size: 1.4em;
+  font-weight: 400;
+  line-height: 1;
+  color: #0b0d12;
+  background: #9aa0af;
+}
+
+.sg-caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 1.1em;
+  margin-left: 0.05em;
+  vertical-align: -0.2em;
+  background: #7e90ff;
+  animation: sg-blink 1s steps(1) infinite;
+}
+
+@keyframes sg-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* the indexing banner, with its progress bar */
+.sg-banner {
+  display: grid;
+  gap: 0.9em;
+  padding: 1.1em 1.3em;
+  border-radius: 1.3em;
+  background: #191c24;
+  animation: pj-rise 0.4s ease-out both;
+}
+
+.sg-banner > div {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  font-size: 1.45em;
+  font-variant-numeric: tabular-nums;
+}
+
+.sg-spark {
+  color: #9aa0af;
+}
+
+.sg-pause {
+  margin-left: auto;
+  font-size: 0.75em;
+  letter-spacing: -0.15em;
+  color: #7e90ff;
+}
+
+.sg-banner > i {
+  height: 0.35em;
+  overflow: hidden;
+  border-radius: 999px;
+  background:
+    linear-gradient(#7e90ff, #7e90ff) 0 0 / calc(var(--k) * 100%) 100% no-repeat,
+    #262a35;
+}
+
+/* the Try suggestions */
+.sg-prompts {
+  display: grid;
+  gap: 1em;
+  padding: 0 1.8em;
+}
+
+.sg-prompts p {
+  margin: 0.8em 0 0;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #9aa0af;
+}
+
+.sg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9em;
+}
+
+.sg-chips span {
+  padding: 1em 1.4em;
+  border-radius: 2em;
+  font-size: 1.5em;
+  background: #191c24;
+  transition:
+    background 0.25s,
+    color 0.25s,
+    transform 0.25s;
+  animation: pj-rise 0.4s ease-out calc(var(--i) * 0.05s) both;
+}
+
+/* the one being tapped */
+.sg-chips span[data-picked] {
+  color: #0b0d12;
+  background: #7e90ff;
+  transform: scale(0.96);
+}
+
+.sg-spinner {
+  width: 4em;
+  height: 4em;
+  margin: 12em auto 0;
+  border-radius: 50%;
+  border: 0.45em solid #262a35;
+  border-top-color: #7e90ff;
+  animation: sg-spin 0.8s linear infinite;
+}
+
+@keyframes sg-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.sg-summary {
+  margin: 0;
+  padding: 0 1.8em 1em;
+  font-size: 1.45em;
+  color: #9aa0af;
+  animation: pj-rise 0.35s ease-out both;
+}
+
+/* the 3-column grid, 2pt gaps, as in PhotoGrid.js */
+.sg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.25em;
+}
+
+.sg-tile {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #191c24;
+  animation: sg-tile 0.45s cubic-bezier(0.3, 1.2, 0.5, 1) calc(var(--i) * 0.06s) both;
+}
+
+.sg-tile svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes sg-tile {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pj *,
+  .pj *::after {
+    animation: none !important;
+  }
+
+  .iphone,
+  .ip-track {
+    transition: none;
+  }
+}
+
+/* narrow screens: no sidebar; the phone under the story */
+@media (max-width: 860px) {
+  .fs-app[data-app='projects'] .fs-body {
+    overflow: auto;
+  }
+
+  .pj {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  .pj-side {
+    display: none;
+  }
+
+  .pj-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .iphone {
+    --h: 560px;
+  }
+}

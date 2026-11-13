@@ -38,13 +38,21 @@ function useTiltToCursor() {
     let rx = 0
     let ry = 0
     let frame = 0
+    // Where the name is, measured only after a scroll or resize (measuring forces a layout), and
+    // from its untilted parent, so the tilt itself doesn't move the target.
+    let box: DOMRect | null = null
+    const remeasure = () => {
+      box = null
+    }
+    // nothing to do once the name has faded out (scrolled on) or an app covers the page
+    const hidden = () => !!el.closest('[data-scrolled], [data-app-open]')
     const tick = () => {
       frame = 0
       let tx = 0
       let ty = 0
       if (mouse) {
         // where the cursor is relative to the name, as a share of the page (-1 … 1)
-        const r = el.getBoundingClientRect()
+        const r = (box ??= (el.parentElement ?? el).getBoundingClientRect())
         const dx = (mouse.x - (r.left + r.width / 2)) / (innerWidth / 2)
         const dy = (mouse.y - (r.top + r.height / 2)) / (innerHeight / 2)
         tx = -Math.max(-1, Math.min(1, dy)) * TILT_X
@@ -60,7 +68,7 @@ function useTiltToCursor() {
       if (!frame) frame = requestAnimationFrame(tick)
     }
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse') return
+      if (e.pointerType !== 'mouse' || hidden()) return
       mouse = { x: e.clientX, y: e.clientY }
       kick()
     }
@@ -71,10 +79,14 @@ function useTiltToCursor() {
     }
     window.addEventListener('pointermove', onMove, { passive: true })
     window.addEventListener('pointerout', onOut)
+    window.addEventListener('scroll', remeasure, { passive: true })
+    window.addEventListener('resize', remeasure)
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerout', onOut)
+      window.removeEventListener('scroll', remeasure)
+      window.removeEventListener('resize', remeasure)
     }
   }, [])
   return ref

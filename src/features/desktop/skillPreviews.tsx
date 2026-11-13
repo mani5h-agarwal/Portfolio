@@ -235,9 +235,9 @@ print("mean:", a.mean(), "  sum:", a.sum())`,
     code: `import pandas as pd
 
 df = pd.DataFrame({
-    "app": ["SwiftShareX", "SmartGalleryX"],
-    "stack": ["React Native · C++", "PyTorch · FastAPI"],
-    "year": [2025, 2026],
+    "app": ["SwiftShareX", "SmartGalleryX", "Bondly"],
+    "stack": ["React Native · C++", "PyTorch · FastAPI", "SwiftUI · Firebase"],
+    "year": [2025, 2026, 2025],
 })
 print(df)`,
     table: {
@@ -245,6 +245,7 @@ print(df)`,
       rows: [
         ['0', 'SwiftShareX', 'React Native · C++', '2025'],
         ['1', 'SmartGalleryX', 'PyTorch · FastAPI', '2026'],
+        ['2', 'Bondly', 'SwiftUI · Firebase', '2025'],
       ],
     },
   },

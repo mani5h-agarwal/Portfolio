@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { profile } from '@/config/profile'
+import { preloadApps } from '@/features/desktop/apps'
 import { Dock } from '@/features/desktop/Desktop'
 import { FullscreenApp } from '@/features/desktop/FullscreenApp'
 import { Spotlight } from '@/features/desktop/Spotlight'
@@ -54,6 +55,11 @@ export function MacBookHero() {
   const isOpen = useCallback(() => track.current?.hasAttribute('data-open') ?? true, [track])
 
   useEffect(installAudioUnlock, [])
+  // fetch the apps' code once the intro has played, so opening one never waits
+  useEffect(() => {
+    const t = window.setTimeout(preloadApps, 2500)
+    return () => window.clearTimeout(t)
+  }, [])
 
   // Latest values for window-level listeners and stable callbacks.
   const latest = useRef({ settings, screen, pressed })

@@ -1,5 +1,5 @@
 /**
- * Each skill's official, full-colour logo (SVGs from Devicon, MIT: skill-logos/LICENSE.txt; Expo's
+ * Each skill's (and project tech's) official, full-colour logo (SVGs from Devicon, MIT: skill-logos/LICENSE.txt; Expo's
  * from Simple Icons, CC0). Loaded as image files when the Skills app opens, not with the page.
  */
 const FILES = import.meta.glob<string>('./skill-logos/*.svg', {
@@ -35,6 +35,11 @@ const LOGOS: Record<string, string> = {
   Postman: 'postman',
   Expo: 'expo',
   Kaggle: 'kaggle',
+  // used by the Projects app
+  TypeScript: 'typescript',
+  Electron: 'electron',
+  SQLite: 'sqlite',
+  Vite: 'vitejs',
 }
 
 export const skillLogo = (name: string): string | undefined => file(LOGOS[name] ?? '')

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, Suspense } from 'react'
 import { AppIcon } from './AppIcon'
 import { genie, genieFrame, GENIE_CLOSE_MS, GENIE_OPEN_MS, type IconBox } from './genie'
 import type { AppDef } from './apps'
@@ -150,7 +150,10 @@ export function FullscreenApp({
         </header>
         <main className="fs-body">
           <div className="mac-content">
-            <Content />
+            {/* its code is usually preloaded already; if not, the window opens and fills in */}
+            <Suspense fallback={null}>
+              <Content />
+            </Suspense>
           </div>
         </main>
       </div>

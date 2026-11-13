@@ -9,6 +9,8 @@ export const profile = {
   tagline: 'Clean, efficient apps, built close to the system.',
   /** A line of your own, shown under the closed laptop on the home page: one entry per line. */
   quote: ['I care about the milliseconds nobody notices.', 'That’s where good software lives.'],
+  /** A photo of you for About Me (put it in public/, e.g. '/me.jpg'); empty shows your initials. */
+  photo: '',
   /** Leave a link empty ('') to hide it. */
   links: {
     github: 'https://github.com/mani5h-agarwal',

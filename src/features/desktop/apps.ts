@@ -1,10 +1,30 @@
-import type { ComponentType } from 'react'
+import { lazy, type ComponentType } from 'react'
 import { profile } from '@/config/profile'
 import type { IconId } from './AppIcon'
-import { About } from './About'
-import { Contact, Projects, Resume, Terminal } from './AppContent'
-import { Experience } from './Experience'
-import { Skills } from './Skills'
+import { Contact, Resume, Terminal } from './AppContent'
+
+/* The bigger apps load on their own, so the first visit downloads only the MacBook and its
+   desktop. preloadApps() fetches them all while the page is idle, so they open at once. */
+const loaders = {
+  about: () => import('./About'),
+  experience: () => import('./Experience'),
+  projects: () => import('./Projects'),
+  skills: () => import('./Skills'),
+}
+const About = lazy(() => loaders.about().then((m) => ({ default: m.About })))
+const Experience = lazy(() => loaders.experience().then((m) => ({ default: m.Experience })))
+const Projects = lazy(() => loaders.projects().then((m) => ({ default: m.Projects })))
+const Skills = lazy(() => loaders.skills().then((m) => ({ default: m.Skills })))
+
+let preloaded = false
+/** Fetches every app's code in the background (once), when the browser has nothing else to do. */
+export function preloadApps() {
+  if (preloaded) return
+  preloaded = true
+  const go = () => Object.values(loaders).forEach((load) => void load())
+  if ('requestIdleCallback' in window) window.requestIdleCallback(go, { timeout: 3000 })
+  else setTimeout(go, 1500)
+}
 
 export interface AppDef {
   id: string

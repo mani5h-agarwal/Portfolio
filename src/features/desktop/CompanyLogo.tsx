@@ -1,4 +1,4 @@
-import acmNitk from './company-logos/acm-nitk.jpg'
+import acmNitk from './company-logos/acm-nitk.webp'
 
 /** Amazon's mark (Simple Icons, CC0), split so the smile can be orange and the "a" black */
 const AMAZON_A =

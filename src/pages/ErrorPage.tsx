@@ -1,13 +1,5 @@
-import { isRouteErrorResponse, useRouteError } from 'react-router'
-
-export function ErrorPage() {
-  const error = useRouteError()
-  const message = isRouteErrorResponse(error)
-    ? `${error.status} ${error.statusText}`
-    : error instanceof Error
-      ? error.message
-      : 'Unknown error'
-
+export function ErrorPage({ error }: { error: unknown }) {
+  const message = error instanceof Error ? error.message : 'Unknown error'
   return (
     <section className="page">
       <h1>Something went wrong</h1>

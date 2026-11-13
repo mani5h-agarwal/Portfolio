@@ -29,11 +29,15 @@ export function unlockAudio() {
 const GESTURES = ['pointerdown', 'mousedown', 'touchend', 'keydown', 'click'] as const
 
 /**
- * Unlock audio on the visitor's first interaction anywhere on the page (any click, tap or key),
- * not just on the keyboard. Returns a cleanup function.
+ * Unlock audio on the visitor's first key press, or first click or tap on the laptop's keyboard or
+ * trackpad: the only things that make a sound. Starting audio is slow (a few hundred ms on some
+ * machines), so a click anywhere else, like opening an app from the Dock, never pays for it.
+ * Returns a cleanup function.
  */
 export function installAudioUnlock() {
-  const onGesture = () => {
+  const onGesture = (e: Event) => {
+    const onKeys = (e.target as Element | null)?.closest?.('[data-key], .mb-trackpad')
+    if (e.type !== 'keydown' && !onKeys) return
     unlockAudio()
     if (ctx?.state === 'running') remove()
   }

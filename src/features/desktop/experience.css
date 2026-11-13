@@ -105,19 +105,33 @@
 
 /* a green dot that breathes: still going */
 .xp-live {
+  position: relative;
   flex: none;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: #30d158;
-  box-shadow: 0 0 0 0 rgb(48 209 88 / 0.6);
+}
+
+/* a ring that grows from the dot and fades (transform and opacity: no repaints) */
+.xp-live::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #30d158;
   animation: xp-live 2.4s ease-out infinite;
 }
 
 @keyframes xp-live {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
   70%,
-  100% {
-    box-shadow: 0 0 0 7px rgb(48 209 88 / 0);
+  to {
+    opacity: 0;
+    transform: scale(2.75);
   }
 }
 

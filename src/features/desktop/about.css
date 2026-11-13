@@ -105,62 +105,127 @@
   height: 14px;
 }
 
-/* ── me: who I am ── */
+/* ── me: my name as on the home page, my line, where I am now ── */
 
-.wg-me-top {
-  display: flex;
-  align-items: center;
-  gap: clamp(14px, 1.6vw, 20px);
+.wg--me {
+  justify-content: space-between;
+  gap: clamp(14px, 2.6vh, 28px);
+  padding: clamp(18px, 3vh, 32px);
 }
 
-/* macOS's grey contact picture */
+.wg-me-head {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 24px);
+}
+
 .wg-avatar {
-  display: grid;
   flex: none;
-  place-items: center;
-  width: clamp(64px, 10vh, 92px);
-  height: clamp(64px, 10vh, 92px);
+  width: clamp(84px, 14vh, 128px);
+  height: clamp(84px, 14vh, 128px);
+  overflow: hidden;
   border-radius: 50%;
-  font-size: clamp(1.4rem, 3.6vh, 2rem);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #fff;
-  background: linear-gradient(180deg, #a2a2a8, #6c6c72);
   box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.2);
 }
 
-.wg--me h2 {
+.wg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wg-eyebrow {
+  margin: 0 0 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #f2a39a;
+  animation: wg-rise 0.5s ease-out 0.15s both;
+}
+
+/* the name, set as on the home page: Anton capitals, the first name light, the last darker,
+   a round rose full stop; a band of light sweeps across it once */
+.wgs .wg-name {
   margin: 0 !important;
-  font-size: clamp(1.4rem, 3.2vh, 1.9rem) !important;
-  font-weight: 700;
+  font-family: Anton, Impact, 'Arial Narrow', sans-serif;
+  font-size: clamp(2.6rem, 7.4vh, 4.6rem) !important;
+  font-weight: 400;
+  line-height: 0.95;
   letter-spacing: -0.01em;
-  color: #fff;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: wg-rise 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) 0.2s both;
+}
+
+.wg-name-first,
+.wg-name-last {
+  --sweep: linear-gradient(100deg, transparent 44%, rgb(255 248 240 / 0.7) 50%, transparent 56%);
+  color: transparent;
+  background:
+    var(--sweep) -150% 0 / 250% 100% no-repeat,
+    linear-gradient(180deg, var(--ink-top), var(--ink-bottom));
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: wg-sweep 1.6s ease-in-out 0.7s both;
+}
+
+.wg-name-first {
+  --ink-top: #f1ece6;
+  --ink-bottom: #c9c2ba;
+}
+
+.wg-name-last {
+  --ink-top: #9a958f;
+  --ink-bottom: #77726c;
+}
+
+@keyframes wg-sweep {
+  from {
+    background-position:
+      -150% 0,
+      0 0;
+  }
+  to {
+    background-position:
+      250% 0,
+      0 0;
+  }
+}
+
+.wg-name-dot {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  margin-left: 0.05em;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffc3a0, #ec8fa9);
 }
 
 .wg-role {
-  margin: 2px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 10px 0 0;
   font-size: 0.95rem;
   color: var(--mac-label);
+  animation: wg-rise 0.5s ease-out 0.3s both;
 }
 
 .wg-love {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin: 8px 0 0;
-  padding: 3px 10px 3px 8px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--mac-label);
-  background: rgb(255 255 255 / 0.08);
+  gap: 5px;
+  font-size: 0.8rem;
+  color: var(--mac-secondary);
 }
 
 .wg-love svg {
   width: 12px;
   height: 12px;
   color: #ff453a;
-  animation: wg-beat 1.6s ease-in-out 0.8s 2;
+  animation: wg-beat 1.6s ease-in-out 1s 2;
 }
 
 @keyframes wg-beat {
@@ -173,90 +238,141 @@
   }
 }
 
-.wg-bio {
+/* the quote from the home page, as the card's statement; one line of bio under it */
+.wg-statement {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(10px, 1.8vh, 16px);
   min-height: 0;
-  overflow: hidden;
 }
 
-.wg-bio p {
-  margin: 0 0 0.6em;
-  font-size: clamp(0.8rem, 1.8vh, 1.02rem);
-  line-height: 1.65;
-  color: rgb(255 255 255 / 0.7);
-}
-
-/* three facts, side by side */
-.wg-facts {
+.wg-statement blockquote {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
   margin: 0;
-}
-
-.wg-facts div {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-  padding: clamp(7px, 1.1vh, 10px) 12px;
-  border-radius: 12px;
-  background: rgb(255 255 255 / 0.05);
-  animation: wg-rise 0.45s ease-out calc(0.3s + var(--i) * 80ms) both;
-}
-
-.wg-facts dt {
-  font-size: 0.66rem;
+  font-size: clamp(1.15rem, 2.9vh, 1.6rem);
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #fff;
+  animation: wg-rise 0.55s ease-out 0.4s both;
+}
+
+.wg-statement blockquote span + span {
   color: var(--mac-secondary);
 }
 
-.wg-facts dd {
+.wgs .wg-bio {
+  max-width: 62ch;
   margin: 0;
-  overflow: hidden;
-  font-size: 0.8rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--mac-label);
+  font-size: clamp(0.82rem, 1.7vh, 0.95rem);
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.6);
+  animation: wg-rise 0.55s ease-out 0.5s both;
 }
 
 .wg-me-foot {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 14px;
-  padding-top: clamp(8px, 1.4vh, 12px);
+  display: grid;
+  gap: 12px;
+  padding-top: clamp(12px, 2vh, 18px);
   border-top: 1px solid var(--mac-separator);
+  animation: wg-rise 0.5s ease-out 0.6s both;
 }
 
-.wg-quote {
-  display: grid;
+/* where I am right now, with a live dot */
+.wg-now {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   margin: 0;
-  font-size: 0.82rem;
-  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--mac-label);
+}
+
+/* the dot, and a ring that grows from it and fades: a transform and opacity, so the GPU does it */
+.wg-now i {
+  position: relative;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #30d158;
+}
+
+.wg-now i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #30d158;
+  animation: wg-live 2.4s ease-out infinite;
+}
+
+@keyframes wg-live {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  70%,
+  to {
+    opacity: 0;
+    transform: scale(2.75);
+  }
+}
+
+.wg-me-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wg-place {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
   color: var(--mac-secondary);
+}
+
+.wg-place svg {
+  width: 14px;
+  height: 14px;
+  color: #ff6961;
 }
 
 .wg-links {
   display: flex;
-  flex: none;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .wgs .wg-links a {
-  padding: 5px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px 6px 11px;
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 500;
   text-decoration: none;
   color: var(--mac-label);
   background: rgb(255 255 255 / 0.08);
-  transition: background 0.15s;
+  transition:
+    background 0.15s,
+    transform 0.15s;
 }
 
 .wgs .wg-links a:hover {
   background: rgb(255 255 255 / 0.16);
+  transform: translateY(-1px);
+}
+
+.wg-links svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* ── education: the degree, the CGPA as a ring, the four years as a bar ── */
@@ -277,7 +393,7 @@
 }
 
 .wg-edu-text strong {
-  font-size: clamp(1.15rem, 2.6vh, 1.45rem);
+  font-size: clamp(1.2rem, 3vh, 1.75rem);
   font-weight: 700;
   color: #fff;
 }
@@ -292,7 +408,7 @@
 }
 
 .wg-ring {
-  --size: clamp(64px, 10vh, 92px);
+  --size: clamp(72px, 12vh, 112px);
   position: relative;
   display: grid;
   flex: none;
@@ -431,6 +547,98 @@
   animation: wg-rise 0.45s ease-out 0.4s both;
 }
 
+/* the way to the offer: the internship done, a line, then SDE I still to come */
+.wg-journey {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wg-journey li {
+  position: relative;
+  display: grid;
+  gap: 1px;
+  padding-top: 18px;
+  animation: wg-rise 0.45s ease-out calc(0.45s + var(--n, 0) * 0.1s) both;
+}
+
+.wg-journey li + li {
+  --n: 1;
+}
+
+/* the line between the two: drawn in from the internship towards the offer */
+.wg-journey li:first-child::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 12px;
+  right: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #30d158, #ff9f0a);
+  transform-origin: left;
+  animation: wg-draw 0.8s ease-out 0.6s both;
+}
+
+@keyframes wg-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.wg-journey i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid #ff9f0a;
+  background: var(--mac-window);
+}
+
+/* done: filled green */
+.wg-journey li[data-done] i {
+  border-color: #30d158;
+  background: #30d158;
+}
+
+/* still to come: a gentle pulse */
+.wg-journey li:not([data-done]) i::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: #ff9f0a;
+  animation: wg-pulse 2.2s ease-out 1.4s infinite both;
+}
+
+@keyframes wg-pulse {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  70%,
+  to {
+    opacity: 0;
+    transform: scale(2.3);
+  }
+}
+
+.wg-journey strong {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--mac-label);
+}
+
+.wg-journey small {
+  font-size: 0.7rem;
+  color: var(--mac-secondary);
+}
+
 .wg-next-when strong {
   font-size: clamp(2rem, 5.4vh, 3rem);
   font-weight: 700;
@@ -536,7 +744,7 @@
 }
 
 .wg-win b {
-  font-size: clamp(1.5rem, 4vh, 2.4rem);
+  font-size: clamp(1.6rem, 5vh, 3rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -693,8 +901,7 @@
   }
 
   .wg-wins,
-  .wg-care,
-  .wg-facts {
+  .wg-care {
     grid-template-columns: 1fr 1fr;
   }
 }

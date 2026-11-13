@@ -3,62 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { portfolio } from '@/config/portfolio'
 import { profile } from '@/config/profile'
 
-/** Placeholder content still to replace: shown muted so it's easy to spot. */
-function isExample(s: string) {
-  return s.startsWith('EXAMPLE')
-}
-
-/* ───────────── Projects ───────────── */
-
-export function Projects() {
-  return (
-    <div className="projects">
-      {portfolio.projects.map((p) => (
-        <article key={p.name} className="project">
-          <div
-            className="project-art"
-            style={{ background: `linear-gradient(135deg, ${p.colors[0]}, ${p.colors[1]})` }}
-            aria-hidden="true"
-          >
-            <span>{p.name.replace('EXAMPLE — ', '').slice(0, 1)}</span>
-          </div>
-          <div className="project-body">
-            <h3 className={isExample(p.name) ? 'example' : undefined}>{p.name}</h3>
-            <p>{p.description}</p>
-            <Tags items={p.tech} />
-            {(p.live || p.code) && (
-              <div className="project-links">
-                {p.live && (
-                  <a href={p.live} target="_blank" rel="noreferrer">
-                    Live ↗
-                  </a>
-                )}
-                {p.code && (
-                  <a href={p.code} target="_blank" rel="noreferrer">
-                    Code ↗
-                  </a>
-                )}
-              </div>
-            )}
-          </div>
-        </article>
-      ))}
-    </div>
-  )
-}
-
-/* ───────────── Skills ───────────── */
-
-function Tags({ items }: { items: string[] }) {
-  return (
-    <ul className="tags">
-      {items.map((t) => (
-        <li key={t}>{t}</li>
-      ))}
-    </ul>
-  )
-}
-
 /* ───────────── Contact ───────────── */
 
 export function Contact() {

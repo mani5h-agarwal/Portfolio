@@ -1,4 +1,5 @@
 import { memo, useEffect, useId, useRef } from 'react'
+import { activeLoop } from '../macbook/activeLoop'
 
 /**
  * A little kitty-blob living on the Mac's desktop. Its big eyes chase the cursor wherever it is
@@ -93,7 +94,6 @@ export const Buddy = memo(function Buddy({ className = '' }: { className?: strin
     let tilt = 0
     let open = 1 // how open the eyes are: 1 open, 0 shut
     let mood: Mood = 'idle'
-    let raf = 0
 
     const animate = (el: Element | null | undefined, frames: Keyframe[], ms: number) => {
       if (!reduce && el && 'animate' in el) el.animate(frames, { duration: ms, easing: 'ease-out' })
@@ -227,8 +227,6 @@ export const Buddy = memo(function Buddy({ className = '' }: { className?: strin
     const offScreen = () => !!svg.closest('[data-asleep], [data-app-open]')
 
     const tick = () => {
-      raf = requestAnimationFrame(tick)
-      if (offScreen()) return
       const t = now()
       // where it is on the page (re-measured a few times a second, or after scrolling)
       if (t - boxAt > 300) {
@@ -323,7 +321,8 @@ export const Buddy = memo(function Buddy({ className = '' }: { className?: strin
     }
 
     svg.dataset.mood = mood
-    raf = requestAnimationFrame(tick)
+    // runs only while it can be seen: no frames at all while the lid is shut or an app is open
+    const stopLoop = activeLoop(() => !offScreen(), tick)
     const hit = svg.querySelector('.buddy-hit')
     window.addEventListener('pointermove', onMove, { passive: true })
     window.addEventListener('pointerout', onOut)
@@ -334,7 +333,7 @@ export const Buddy = memo(function Buddy({ className = '' }: { className?: strin
     hit?.addEventListener('pointerleave', onLeave)
     hit?.addEventListener('pointerdown', onDown)
     return () => {
-      cancelAnimationFrame(raf)
+      stopLoop()
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerout', onOut)
       window.removeEventListener('keydown', onKey)

@@ -1,10 +1,8 @@
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { createMemoryRouter, RouterProvider } from 'react-router'
-import { routes } from '@/app/routes'
+import { App } from '@/app/App'
 
 /** Render the full app at a given URL. */
 export function renderRoute(path = '/') {
-  const router = createMemoryRouter(routes, { initialEntries: [path] })
-  return { user: userEvent.setup(), router, ...render(<RouterProvider router={router} />) }
+  return { user: userEvent.setup(), ...render(<App path={path} />) }
 }

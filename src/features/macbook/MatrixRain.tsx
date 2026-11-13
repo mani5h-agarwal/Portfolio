@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { activeLoop } from './activeLoop'
 
 /**
  * Digital rain as a quiet background: streams of glyphs falling in three depths. Near streams are
@@ -119,7 +120,6 @@ export function MatrixRain({ className }: { className?: string }) {
     // One discrete step: every trail fades a little back into the backdrop, then each stream that
     // has reached a new row draws its glyph there.
     const step = () => {
-      box = canvas.getBoundingClientRect()
       ctx.globalAlpha = FADE
       ctx.fillStyle = backdrop
       ctx.fillRect(0, 0, width, height)
@@ -153,7 +153,10 @@ export function MatrixRain({ className }: { className?: string }) {
     if (still) return () => observer.disconnect()
 
     const onMove = (e: PointerEvent) => {
-      mouse = e.pointerType === 'mouse' ? { x: e.clientX - box.left, y: e.clientY - box.top } : null
+      if (e.pointerType !== 'mouse') return void (mouse = null)
+      // measured here, when the cursor moves, not on every step of the rain
+      box = canvas.getBoundingClientRect()
+      mouse = { x: e.clientX - box.left, y: e.clientY - box.top }
     }
     const onOut = (e: PointerEvent) => {
       if (!e.relatedTarget) mouse = null // left the window
@@ -161,20 +164,19 @@ export function MatrixRain({ className }: { className?: string }) {
     window.addEventListener('pointermove', onMove, { passive: true })
     window.addEventListener('pointerout', onOut)
 
-    let frame = 0
+    // stopped altogether while an app covers the whole page (or the tab is hidden)
     let last = 0
-    const loop = (t: number) => {
-      // paused while an app covers the whole page
-      if (t - last >= STEP_MS && !canvas.closest('[data-app-open]')) {
+    const stopLoop = activeLoop(
+      () => !canvas.closest('[data-app-open]'),
+      (t) => {
+        if (t - last < STEP_MS) return
         last = t
         step()
-      }
-      frame = requestAnimationFrame(loop)
-    }
-    frame = requestAnimationFrame(loop)
+      },
+    )
 
     return () => {
-      cancelAnimationFrame(frame)
+      stopLoop()
       observer.disconnect()
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerout', onOut)

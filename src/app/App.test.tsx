@@ -37,12 +37,6 @@ describe('app', () => {
     expect(container.querySelector('.led')).toHaveClass('on')
   })
 
-  it('renders the about page with the header', () => {
-    renderRoute('/about')
-    expect(screen.getByRole('heading', { name: 'About' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument()
-  })
-
   it('shows 404 for unknown routes', () => {
     renderRoute('/does-not-exist')
     expect(screen.getByRole('heading', { name: '404' })).toBeInTheDocument()
