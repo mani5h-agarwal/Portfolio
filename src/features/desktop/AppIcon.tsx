@@ -10,6 +10,8 @@ export type IconId =
   | 'resume'
   | 'github'
   | 'linkedin'
+  | 'instagram'
+  | 'x'
 
 /** The macOS app icon shape: a rounded square (corners 22.5% of the size) in a 100×100 box. */
 const SQUIRCLE =
@@ -243,15 +245,49 @@ const ICONS: Record<IconId, Art> = {
       />
     ),
   },
-  // "in"
+  // LinkedIn's "in" (Devicon, MIT), sized as in its official square logo
   linkedin: {
-    bg: ['#1b78d0', '#0a66c2'],
+    bg: ['#0a66c2', '#0a66c2'],
     art: () => (
-      <g fill="#fff" transform="translate(10 8) scale(3.3)">
-        <rect x="5" y="9.5" width="3" height="9" rx="0.6" />
-        <circle cx="6.5" cy="6.4" r="1.7" />
-        <path d="M10.5 9.5h2.8v1.3c.6-.9 1.6-1.6 3.1-1.6 2.3 0 3.6 1.5 3.6 4.2v5.1h-3v-4.6c0-1.3-.5-2-1.6-2s-1.9.8-1.9 2.1v4.5h-3z" />
-      </g>
+      <path
+        fill="#fff"
+        transform="translate(50 50) scale(0.66) translate(-64 -63.4)"
+        d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 11-10.5 10.49 10.5 10.5 0 0110.5-10.49M50.53 48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z"
+      />
+    ),
+  },
+  // Instagram's camera on its sunset gradient
+  instagram: {
+    bg: ['#d62976', '#962fbf'],
+    art: (id) => (
+      <>
+        <defs>
+          <radialGradient id={`${id}-ig`} cx="0.28" cy="1.05" r="1.25">
+            <stop offset="0" stopColor="#fdd56b" />
+            <stop offset="0.12" stopColor="#feb35a" />
+            <stop offset="0.38" stopColor="#f2465c" />
+            <stop offset="0.62" stopColor="#d1307e" />
+            <stop offset="1" stopColor="#5b51d8" />
+          </radialGradient>
+        </defs>
+        <rect width="100" height="100" fill={`url(#${id}-ig)`} />
+        <g fill="none" stroke="#fff" strokeWidth="6.5">
+          <rect x="25" y="25" width="50" height="50" rx="14" />
+          <circle cx="50" cy="50" r="12" />
+        </g>
+        <circle cx="64.5" cy="35.5" r="3.8" fill="#fff" />
+      </>
+    ),
+  },
+  // the X mark
+  x: {
+    bg: ['#1c1c1e', '#000000'],
+    art: () => (
+      <path
+        fill="#fff"
+        transform="translate(23 23) scale(2.25)"
+        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+      />
     ),
   },
 }

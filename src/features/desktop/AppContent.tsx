@@ -8,64 +8,6 @@ function isExample(s: string) {
   return s.startsWith('EXAMPLE')
 }
 
-/* ───────────── About ───────────── */
-
-export function About() {
-  return (
-    <div className="app-about">
-      <div className="about-head">
-        <div className="about-avatar">{profile.initials}</div>
-        <div>
-          <h2>{profile.name}</h2>
-          <p className="accent">{profile.role}</p>
-          <p className="muted">{profile.tagline}</p>
-        </div>
-      </div>
-      {portfolio.about.paragraphs.map((p, i) => (
-        <p key={i} className={isExample(p) ? 'example' : undefined}>
-          {p}
-        </p>
-      ))}
-      <dl className="about-facts">
-        {portfolio.about.facts.map((f) => (
-          <div key={f.label}>
-            <dt>{f.label}</dt>
-            <dd className={isExample(f.value) ? 'example' : undefined}>{f.value}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
-  )
-}
-
-/* ───────────── Experience ───────────── */
-
-export function Experience() {
-  return (
-    <ol className="timeline">
-      {portfolio.experience.map((job) => (
-        <li key={job.company + job.period}>
-          <div className="timeline-dot" aria-hidden="true" />
-          <div className="timeline-meta">
-            <span>{job.period}</span>
-            {job.location && <span>{job.location}</span>}
-          </div>
-          <h3>
-            {job.role} <span className="muted">· </span>
-            <span className={isExample(job.company) ? 'example' : 'accent'}>{job.company}</span>
-          </h3>
-          <ul>
-            {job.points.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-          {job.tech && <Tags items={job.tech} />}
-        </li>
-      ))}
-    </ol>
-  )
-}
-
 /* ───────────── Projects ───────────── */
 
 export function Projects() {
@@ -107,19 +49,6 @@ export function Projects() {
 
 /* ───────────── Skills ───────────── */
 
-export function Skills() {
-  return (
-    <div className="skills">
-      {portfolio.skills.map((g) => (
-        <section key={g.group}>
-          <h3 className={isExample(g.group) ? 'example' : undefined}>{g.group}</h3>
-          <Tags items={g.items} />
-        </section>
-      ))}
-    </div>
-  )
-}
-
 function Tags({ items }: { items: string[] }) {
   return (
     <ul className="tags">
@@ -133,8 +62,10 @@ function Tags({ items }: { items: string[] }) {
 /* ───────────── Contact ───────────── */
 
 export function Contact() {
-  const { email, linkedin } = portfolio.contact
-  const github = profile.links.github
+  const { email } = portfolio.contact
+  const { github, linkedin, instagram, x } = profile.links
+  /** a profile link's address, short: github.com/name */
+  const short = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
   return (
     <div className="contact">
       <h2>Let’s talk.</h2>
@@ -157,12 +88,25 @@ export function Contact() {
         {github && (
           <a className="contact-row" href={github} target="_blank" rel="noreferrer">
             <span>GitHub</span>
-            <strong>{github.replace(/^https?:\/\//, '')} ↗</strong>
+            <strong>{short(github)} ↗</strong>
+          </a>
+        )}
+        {instagram && (
+          <a className="contact-row" href={instagram} target="_blank" rel="noreferrer">
+            <span>Instagram</span>
+            <strong>{short(instagram)} ↗</strong>
+          </a>
+        )}
+        {x && (
+          <a className="contact-row" href={x} target="_blank" rel="noreferrer">
+            <span>X</span>
+            <strong>{short(x)} ↗</strong>
           </a>
         )}
         {!email && !linkedin && (
           <p className="example">
-            Add your email and LinkedIn in <code>src/config/portfolio.ts</code> → contact.
+            Add your email in <code>src/config/portfolio.ts</code> → contact, and LinkedIn in{' '}
+            <code>src/config/profile.ts</code> → links.
           </p>
         )}
       </div>
@@ -187,17 +131,12 @@ export function Resume() {
   // the PDF right here in the window, like opening it in Preview
   return (
     <div className="resume is-viewer">
-      {/* the browser's own PDF toolbar is hidden (no rotate / draw / edit); just a download */}
+      {/* the browser's own PDF toolbar is hidden (no rotate / draw / edit) */}
       <iframe
         className="resume-pdf"
         src={`${url}#toolbar=0&navpanes=0&view=FitH`}
         title="Résumé (PDF)"
       />
-      <a className="resume-download" href={url} download aria-label="Download résumé">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19.5h14" />
-        </svg>
-      </a>
     </div>
   )
 }
@@ -206,29 +145,85 @@ export function Resume() {
 
 const COMMANDS: Record<string, () => string[]> = {
   help: () => [
-    'Commands: whoami, about, experience, projects, skills, contact, cat what_i_care_about.txt, clear',
+    'Commands: neofetch, whoami, about, experience, projects, skills, contact, cat what_i_care_about.txt, clear',
   ],
   whoami: () => [`${profile.name} — ${profile.role}`, profile.tagline],
   'cat what_i_care_about.txt': () => portfolio.values.map((v) => `> ${v}`),
   about: () => portfolio.about.paragraphs,
   experience: () =>
-    portfolio.experience.map((j) => `${j.period.padEnd(16)} ${j.role} — ${j.company}`),
+    portfolio.experience.map((j) => `${j.period.padEnd(20)} ${j.role} — ${j.company}`),
   projects: () => portfolio.projects.map((p) => `• ${p.name} (${p.tech.join(', ')})`),
   skills: () => portfolio.skills.map((g) => `${g.group}: ${g.items.join(', ')}`),
   contact: () =>
     [
       portfolio.contact.email && `email     ${portfolio.contact.email}`,
-      portfolio.contact.linkedin && `linkedin  ${portfolio.contact.linkedin}`,
+      profile.links.linkedin && `linkedin  ${profile.links.linkedin}`,
       profile.links.github && `github    ${profile.links.github}`,
+      profile.links.instagram && `instagram ${profile.links.instagram}`,
+      profile.links.x && `x         ${profile.links.x}`,
     ].filter(Boolean) as string[],
 }
+
+/** Buddy, the cat from the desktop, in ASCII: neofetch's logo */
+const CAT = String.raw`
+    /\             /\
+   /  \___________/  \
+  /                   \
+ |    ██         ██    |
+ |    ██         ██    |
+ |  ~      ‿‿      ~   |
+  \                   /
+   '-._____________.-'
+`.slice(1)
+
+/** `neofetch`, about me: the cat on the left, "system info" on the right, then the colour blocks */
+function Neofetch() {
+  const user = `${profile.firstName.toLowerCase()}@macbook`
+  return (
+    <div className="neofetch">
+      <pre className="neofetch-logo" aria-hidden="true">
+        {CAT}
+      </pre>
+      <div className="neofetch-info">
+        <div>
+          <span className="nf-key">{user}</span>
+        </div>
+        <div className="nf-rule">{'-'.repeat(user.length)}</div>
+        {portfolio.neofetch.map(([k, v]) => (
+          <div key={k}>
+            <span className="nf-key">{k}</span>: {v}
+          </div>
+        ))}
+        <div className="nf-blocks" aria-hidden="true">
+          {NF_COLORS.map((c) => (
+            <span key={c} style={{ background: c }} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** neofetch's row of terminal colours, in this Mac's palette */
+const NF_COLORS = [
+  '#2a2733',
+  '#ff6b7a',
+  '#5dff8f',
+  '#ffd36b',
+  '#6ba8ff',
+  '#c9a2ff',
+  '#6be4ff',
+  '#f1ece5',
+]
 
 export function Terminal() {
   const user = profile.firstName.toLowerCase()
   const prompt = `${user}@macbook ~ %`
   // opens like my GitHub README: what I care about, then the prompt
-  const [lines, setLines] = useState<{ text: string; cmd?: boolean }[]>(() => [
+  const [lines, setLines] = useState<{ text: string; cmd?: boolean; fetch?: boolean }[]>(() => [
     { text: `Last login: ${new Date().toDateString()} on ttys000` },
+    { text: 'neofetch', cmd: true },
+    { text: '', fetch: true },
     { text: 'cat what_i_care_about.txt', cmd: true },
     ...portfolio.values.map((v) => ({ text: `> ${v}` })),
     { text: '' },
@@ -253,19 +248,25 @@ export function Terminal() {
   const run = (raw: string) => {
     const cmd = raw.trim().toLowerCase()
     if (cmd === 'clear') return setLines([])
+    if (cmd === 'neofetch')
+      return setLines((l) => [...l, { text: raw, cmd: true }, { text: '', fetch: true }])
     const out = cmd ? (COMMANDS[cmd]?.() ?? [`zsh: command not found: ${cmd}`]) : []
     setLines((l) => [...l, { text: raw, cmd: true }, ...out.map((text) => ({ text }))])
   }
 
   return (
     <div className="terminal" onClick={() => inputRef.current?.focus({ preventScroll: true })}>
-      {lines.map((l, i) => (
-        <div key={i} className={l.cmd ? 'term-cmd' : undefined}>
-          {/* every command keeps its green prompt, like the live one */}
-          {l.cmd && <span className="term-prompt">{prompt} </span>}
-          {l.text}
-        </div>
-      ))}
+      {lines.map((l, i) =>
+        l.fetch ? (
+          <Neofetch key={i} />
+        ) : (
+          <div key={i} className={l.cmd ? 'term-cmd' : undefined}>
+            {/* every command keeps its green prompt, like the live one */}
+            {l.cmd && <span className="term-prompt">{prompt} </span>}
+            {l.text}
+          </div>
+        ),
+      )}
       <form
         className="term-input"
         onSubmit={(e) => {

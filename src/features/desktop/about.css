@@ -1,0 +1,700 @@
+/* ─────────────── About Me (About.tsx): a wall of macOS widgets ─────────────── */
+
+.fs-app[data-app='about'] .fs-body {
+  display: flex;
+  overflow: hidden;
+}
+
+.fs-app[data-app='about'] .mac-content {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* animatable numbers: the CGPA ring's fill, and each year of the degree bar */
+@property --v {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --fill {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+/* Four columns, three rows, filling the window, with the same space on every side as between
+   the widgets: the profile takes the top-left square. */
+.wgs {
+  --gap: clamp(12px, 1.8vh, 18px);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    'me me edu edu'
+    'me me next stack'
+    'wins wins care care';
+  gap: var(--gap);
+  height: 100%;
+  padding: var(--gap);
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+/* ── a widget ── */
+
+.wg {
+  --tint: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 14px);
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(14px, 2vh, 20px);
+  overflow: hidden;
+  border-radius: 22px;
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+  animation: wg-pop 0.55s cubic-bezier(0.25, 1.3, 0.5, 1) calc(var(--n) * 60ms) both;
+  transition:
+    transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1),
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.wg:hover {
+  background: rgb(255 255 255 / 0.065);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.2);
+  transform: translateY(-2px);
+}
+
+@keyframes wg-pop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+}
+
+/* things inside a widget arrive a beat after it */
+@keyframes wg-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.wg-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  margin: 0 !important;
+  font-size: 0.7rem !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tint) !important;
+}
+
+.wg-head svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── me: who I am ── */
+
+.wg-me-top {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 20px);
+}
+
+/* macOS's grey contact picture */
+.wg-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: clamp(64px, 10vh, 92px);
+  height: clamp(64px, 10vh, 92px);
+  border-radius: 50%;
+  font-size: clamp(1.4rem, 3.6vh, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: linear-gradient(180deg, #a2a2a8, #6c6c72);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.2);
+}
+
+.wg--me h2 {
+  margin: 0 !important;
+  font-size: clamp(1.4rem, 3.2vh, 1.9rem) !important;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.wg-role {
+  margin: 2px 0 0;
+  font-size: 0.95rem;
+  color: var(--mac-label);
+}
+
+.wg-love {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 3px 10px 3px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.wg-love svg {
+  width: 12px;
+  height: 12px;
+  color: #ff453a;
+  animation: wg-beat 1.6s ease-in-out 0.8s 2;
+}
+
+@keyframes wg-beat {
+  15%,
+  45% {
+    transform: scale(1.3);
+  }
+  30% {
+    transform: scale(1);
+  }
+}
+
+.wg-bio {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.wg-bio p {
+  margin: 0 0 0.6em;
+  font-size: clamp(0.8rem, 1.8vh, 1.02rem);
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.7);
+}
+
+/* three facts, side by side */
+.wg-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.wg-facts div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: clamp(7px, 1.1vh, 10px) 12px;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.05);
+  animation: wg-rise 0.45s ease-out calc(0.3s + var(--i) * 80ms) both;
+}
+
+.wg-facts dt {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--mac-secondary);
+}
+
+.wg-facts dd {
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--mac-label);
+}
+
+.wg-me-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: clamp(8px, 1.4vh, 12px);
+  border-top: 1px solid var(--mac-separator);
+}
+
+.wg-quote {
+  display: grid;
+  margin: 0;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--mac-secondary);
+}
+
+.wg-links {
+  display: flex;
+  flex: none;
+  gap: 8px;
+}
+
+.wgs .wg-links a {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.08);
+  transition: background 0.15s;
+}
+
+.wgs .wg-links a:hover {
+  background: rgb(255 255 255 / 0.16);
+}
+
+/* ── education: the degree, the CGPA as a ring, the four years as a bar ── */
+
+.wg-edu {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 0;
+}
+
+.wg-edu-text {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.wg-edu-text strong {
+  font-size: clamp(1.15rem, 2.6vh, 1.45rem);
+  font-weight: 700;
+  color: #fff;
+}
+
+.wg-edu-text span {
+  color: var(--mac-label);
+}
+
+.wg-edu-text small {
+  font-size: 0.75rem;
+  color: var(--mac-secondary);
+}
+
+.wg-ring {
+  --size: clamp(64px, 10vh, 92px);
+  position: relative;
+  display: grid;
+  flex: none;
+  place-content: center;
+  width: var(--size);
+  height: var(--size);
+  text-align: center;
+  /* fills from empty to the score */
+  animation: wg-ring 1.1s cubic-bezier(0.3, 0.7, 0.3, 1) 0.25s both;
+}
+
+@keyframes wg-ring {
+  from {
+    --v: 0;
+  }
+}
+
+.wg-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(#30d158 calc(var(--v) * 1turn), rgb(255 255 255 / 0.1) 0);
+  mask: radial-gradient(circle, transparent 62%, #000 63%);
+}
+
+.wg-ring b {
+  font-size: clamp(1rem, 2.2vh, 1.25rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.wg-ring small {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--mac-secondary);
+}
+
+.wg-progress {
+  display: grid;
+  gap: 6px;
+}
+
+.wg-progress-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+/* each year fills after the one before it */
+.wg-progress-bar i {
+  background:
+    linear-gradient(90deg, #0a84ff, #4aa3ff) 0 0 / calc(var(--fill) * 100%) 100% no-repeat,
+    rgb(255 255 255 / 0.1);
+  animation: wg-fill 0.45s ease-out calc(0.35s + var(--i) * 0.3s) both;
+}
+
+@keyframes wg-fill {
+  from {
+    --fill: 0;
+  }
+}
+
+.wg-progress-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  color: var(--mac-secondary);
+}
+
+.wg-progress-foot span:first-child {
+  font-weight: 600;
+  color: var(--mac-label);
+}
+
+/* ── up next: the role I'm joining, like the Calendar widget ── */
+
+.wg-next {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 0;
+}
+
+.wg-next-who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: wg-rise 0.45s ease-out 0.3s both;
+}
+
+.wg-next-who span {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.wg-next-who strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.wg-next-who small {
+  font-size: 0.74rem;
+  color: var(--mac-secondary);
+}
+
+.wg-next-logo {
+  flex: none;
+  width: clamp(36px, 5vh, 46px);
+  height: clamp(36px, 5vh, 46px);
+  overflow: hidden;
+  border-radius: 24%;
+}
+
+.wg-next-logo svg,
+.wg-next-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wg-next-when {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  animation: wg-rise 0.45s ease-out 0.4s both;
+}
+
+.wg-next-when strong {
+  font-size: clamp(2rem, 5.4vh, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.wg-chip {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #ffb340;
+  background: rgb(255 159 10 / 0.14);
+}
+
+/* ── builds with: six logos, as app tiles that pop in one by one ── */
+
+.wg-stack {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: center;
+  gap: clamp(6px, 1.2vh, 12px) 6px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wg-stack li {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-width: 0;
+  animation: wg-tile 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) calc(0.3s + var(--i) * 60ms) both;
+}
+
+@keyframes wg-tile {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.wg-stack-tile {
+  display: grid;
+  place-items: center;
+  width: clamp(32px, 4.8vh, 44px);
+  height: clamp(32px, 4.8vh, 44px);
+  border-radius: 24%;
+  background: rgb(255 255 255 / 0.08);
+  transition: transform 0.3s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.wg-stack li:hover .wg-stack-tile {
+  transform: translateY(-3px) scale(1.12);
+}
+
+.wg-stack-tile img {
+  width: 62%;
+  height: 62%;
+}
+
+.wg-stack small {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 0.66rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--mac-secondary);
+}
+
+/* ── achievements: big numbers, like the Stocks widget ── */
+
+.wg-wins {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: center;
+  gap: 12px;
+  min-height: 0;
+}
+
+.wg-win {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding-left: 12px;
+  border-left: 2px solid rgb(255 255 255 / 0.1);
+  animation: wg-rise 0.45s ease-out calc(0.3s + var(--i) * 0.1s) both;
+}
+
+.wg-win[data-kind='gold'] {
+  border-color: #ffd60a;
+}
+
+.wg-win[data-kind='silver'] {
+  border-color: #c7c7cc;
+}
+
+.wg-win b {
+  font-size: clamp(1.5rem, 4vh, 2.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.wg-win[data-kind='gold'] b {
+  color: #ffd60a;
+}
+
+.wg-win[data-kind='silver'] b {
+  color: #d1d1d6;
+}
+
+.wg-win span {
+  overflow: hidden;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--mac-label);
+}
+
+.wg-win small {
+  font-size: 0.72rem;
+  color: var(--mac-secondary);
+}
+
+/* ── always on: switches that won't turn off ── */
+
+.wg-care {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  gap: clamp(8px, 1.4vh, 12px);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wg-care li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: clamp(8px, 1.3vh, 12px) 12px;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.05);
+  animation: wg-rise 0.45s ease-out calc(0.3s + var(--i) * 70ms) both;
+}
+
+/* the label and "Can't turn this off" share one cell: the taller sets its height */
+.wg-care-text {
+  display: grid;
+  min-width: 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.wg-care-text > span {
+  grid-area: 1 / 1;
+  color: var(--mac-label);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.wg-care-text > span:last-child {
+  color: #ff8a80;
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.wg-care-text[data-tried] > span:first-child {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.wg-care-text[data-tried] > span:last-child {
+  opacity: 1;
+  transform: none;
+}
+
+.wg-switch {
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #30d158;
+  cursor: pointer;
+}
+
+.wg-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 18px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.wg-switch[data-tried] {
+  animation: wg-flash 0.6s ease-out;
+}
+
+.wg-switch[data-tried]::after {
+  animation: wg-spring 0.6s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+@keyframes wg-spring {
+  35% {
+    left: 6px;
+  }
+}
+
+@keyframes wg-flash {
+  35% {
+    background: rgb(255 255 255 / 0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wgs *,
+  .wgs *::after {
+    animation: none !important;
+  }
+}
+
+/* narrow screens: two columns, scrolling */
+@media (max-width: 760px) {
+  .fs-app[data-app='about'] .fs-body {
+    overflow: auto;
+  }
+
+  .wgs {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+    grid-template-areas:
+      'me me'
+      'edu edu'
+      'next stack'
+      'wins wins'
+      'care care';
+    height: auto;
+  }
+
+  .wg-wins,
+  .wg-care,
+  .wg-facts {
+    grid-template-columns: 1fr 1fr;
+  }
+}

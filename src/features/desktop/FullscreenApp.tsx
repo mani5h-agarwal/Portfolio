@@ -36,9 +36,12 @@ export function FullscreenApp({
   }
   const closeRef = useRef<HTMLButtonElement>(null)
   /** Keyboard focus once open: the app's own text field if it has one (the terminal's prompt),
-   *  otherwise the window itself, which shows no focus ring (the close button would). */
+   *  otherwise the window itself, which shows no focus ring (the close button would). A field
+   *  marked data-no-autofocus (Finder's search) waits to be clicked. */
   const focusApp = () => {
-    const field = win.current?.querySelector<HTMLElement>('input, textarea')
+    const field = win.current?.querySelector<HTMLElement>(
+      'input:not([data-no-autofocus]), textarea:not([data-no-autofocus])',
+    )
     ;(field ?? win.current)?.focus({ preventScroll: true })
   }
 

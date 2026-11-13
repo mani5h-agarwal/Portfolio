@@ -1,0 +1,550 @@
+/* ─────────────── Experience app (Experience.tsx): a macOS split view ─────────────── */
+
+.fs-app[data-app='experience'] .fs-body {
+  display: flex;
+  overflow: hidden;
+}
+
+.fs-app[data-app='experience'] .mac-content {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.xp {
+  display: grid;
+  grid-template-columns: clamp(260px, 22vw, 320px) minmax(0, 1fr);
+  height: 100%;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+/* ── the roles, in a floating glass sidebar (as Finder's) ── */
+
+.xp-side {
+  margin: 10px 0 10px 10px;
+  padding: 10px 8px;
+  overflow: auto;
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.045);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+}
+
+.xp-side h4 {
+  margin: 12px 10px 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--mac-secondary);
+}
+
+.xp-side section:first-child h4 {
+  margin-top: 2px;
+}
+
+.xp-side ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xp-side li {
+  min-width: 0;
+}
+
+.xp-side button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  text-align: left;
+  color: var(--mac-label);
+  background: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.xp-side button:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+
+.xp-side button[aria-current] {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.xp-side-text {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+
+.xp-side-text strong,
+.xp-side-text span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xp-side-text strong {
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.xp-side-text span {
+  font-size: 0.74rem;
+  color: var(--mac-secondary);
+}
+
+/* a green dot that breathes: still going */
+.xp-live {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #30d158;
+  box-shadow: 0 0 0 0 rgb(48 209 88 / 0.6);
+  animation: xp-live 2.4s ease-out infinite;
+}
+
+@keyframes xp-live {
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgb(48 209 88 / 0);
+  }
+}
+
+/* a company's mark: a small app-icon-like tile */
+.xp-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border-radius: 24%;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.18);
+}
+
+.xp-mark svg,
+.xp-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  font-family:
+    ui-rounded,
+    'SF Pro Rounded',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* ── the main pane: the timeline, and the chosen role ── */
+
+.xp-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(14px, 2.4vh, 24px) clamp(20px, 3.4vw, 52px) 16px;
+  overflow: auto;
+}
+
+/* every role on a line of time: a label column, then the tracks */
+.xp-timeline {
+  --label-w: clamp(170px, 15vw, 230px);
+  --row-h: clamp(34px, 4.6vh, 44px);
+  --pad: 16px;
+  position: relative;
+  display: grid;
+  flex: none;
+  gap: 4px;
+  padding: 34px var(--pad) 12px;
+  border-radius: 14px;
+  background: var(--mac-raised);
+  box-shadow: inset 0 0 0 0.5px var(--mac-separator);
+}
+
+/* behind the tracks: the years, hairlines at each, and today */
+.xp-axis {
+  position: absolute;
+  top: 12px;
+  bottom: 10px;
+  left: calc(var(--pad) + var(--label-w));
+  right: var(--pad);
+  pointer-events: none;
+}
+
+.xp-year {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding-left: 6px;
+  border-left: 1px solid var(--mac-separator);
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--mac-secondary);
+}
+
+.xp-today {
+  position: absolute;
+  top: 0;
+  bottom: -2px;
+  border-left: 1.5px solid #ff453a;
+}
+
+/* its label sits just left of the line, clear of the next year's */
+.xp-today b {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ff6961;
+}
+
+.xp-row {
+  display: grid;
+  grid-template-columns: var(--label-w) minmax(0, 1fr);
+  align-items: center;
+  height: var(--row-h);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.xp-row[aria-current] {
+  background: rgb(255 255 255 / 0.05);
+}
+
+.xp-row-label {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  padding: 0 12px 0 10px;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  background: none;
+  cursor: pointer;
+}
+
+.xp-row-label strong,
+.xp-row-label span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xp-row-label strong {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--mac-secondary);
+  transition: color 0.2s;
+}
+
+.xp-row-label span {
+  font-size: 0.68rem;
+  color: rgb(255 255 255 / 0.35);
+}
+
+.xp-row[aria-current] .xp-row-label strong,
+.xp-row-label:hover strong {
+  color: var(--mac-label);
+}
+
+.xp-track {
+  position: relative;
+  height: 100%;
+}
+
+.xp-bar {
+  position: absolute;
+  top: 50%;
+  height: 20px;
+  min-width: 10px;
+  padding: 0 10px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  color: #fff;
+  background: color-mix(in srgb, var(--c) 32%, transparent);
+  translate: 0 -50%;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    box-shadow 0.25s;
+}
+
+.xp-bar span {
+  opacity: 0.7;
+}
+
+.xp-bar:hover {
+  background: color-mix(in srgb, var(--c) 50%, transparent);
+}
+
+.xp-row[aria-current] .xp-bar {
+  background: var(--c);
+}
+
+.xp-row[aria-current] .xp-bar span {
+  opacity: 1;
+}
+
+/* a short role's dates don't fit in its bar: they sit after it */
+.xp-row[data-short] .xp-bar {
+  overflow: visible;
+}
+
+.xp-row[data-short] .xp-bar span {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 8px);
+  color: var(--mac-secondary);
+  translate: 0 -50%;
+}
+
+.xp-row[data-short][aria-current] .xp-bar span {
+  color: var(--mac-label);
+}
+
+/* not started yet: striped, fading into the future */
+.xp-row[data-status='upcoming'] .xp-bar {
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--c) 45%, transparent) 0 6px,
+    color-mix(in srgb, var(--c) 18%, transparent) 6px 12px
+  );
+  mask-image: linear-gradient(90deg, #000 60%, transparent);
+}
+
+.xp-row[data-status='upcoming'][aria-current] .xp-bar {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--c) 0 6px,
+    color-mix(in srgb, var(--c) 65%, transparent) 6px 12px
+  );
+}
+
+/* ── the chosen role ── */
+
+.xp-detail {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  padding-top: clamp(18px, 3.4vh, 34px);
+}
+
+.xp-hero {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  animation: xp-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.xp-hero h2 {
+  margin: 0 !important;
+  font-size: clamp(1.3rem, 2.6vh, 1.7rem) !important;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.xp-company {
+  margin: 3px 0 0;
+  font-size: 0.92rem;
+  color: var(--mac-label);
+}
+
+.xp .xp-company a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.xp .xp-company a:hover {
+  color: #4aa3ff;
+}
+
+.xp-company span {
+  color: var(--mac-secondary);
+}
+
+.xp-when {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--mac-secondary);
+}
+
+.xp-badge {
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.xp-badge[data-status='now'] {
+  color: #30d158;
+  background: rgb(48 209 88 / 0.14);
+}
+
+.xp-badge[data-status='upcoming'] {
+  color: #ffb340;
+  background: rgb(255 159 10 / 0.14);
+}
+
+.xp-badge[data-status='done'] {
+  color: var(--mac-label);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.xp-dur::before {
+  content: '·';
+  margin-right: 10px;
+}
+
+.xp-detail h3 {
+  margin: clamp(18px, 3.2vh, 30px) 0 10px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mac-secondary) !important;
+  animation: xp-in 0.45s 0.08s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.xp-points {
+  display: grid;
+  gap: clamp(8px, 1.5vh, 14px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xp-points li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.68);
+  animation: xp-in 0.45s calc(0.12s + var(--i) * 0.07s) cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.xp-points li::before {
+  content: '';
+  position: absolute;
+  top: 0.62em;
+  left: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.xp-points b {
+  font-weight: 600;
+  color: #fff;
+}
+
+.xp-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: xp-in 0.45s 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.xp-tech li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px 5px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: var(--mac-label);
+  background: var(--mac-raised);
+  box-shadow: inset 0 0 0 0.5px var(--mac-separator);
+}
+
+.xp-tech img {
+  width: 16px;
+  height: 16px;
+}
+
+/* a link to the role this one leads to or comes from */
+.xp-related {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  align-self: flex-start;
+  margin-top: clamp(18px, 3.2vh, 30px);
+  padding: 8px 14px 8px 12px;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--mac-secondary);
+  background: var(--mac-raised);
+  box-shadow: inset 0 0 0 0.5px var(--mac-separator);
+  cursor: pointer;
+  transition: background 0.15s;
+  animation: xp-in 0.45s 0.36s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.xp-related:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.xp-related strong {
+  font-weight: 600;
+  color: var(--mac-label);
+}
+
+.xp-related-go {
+  color: #4aa3ff;
+}
+
+@keyframes xp-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp *,
+  .xp *::before {
+    animation: none !important;
+  }
+}
+
+/* narrow screens: no sidebar; the timeline picks the role */
+@media (max-width: 760px) {
+  .xp {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .xp-side {
+    display: none;
+  }
+}

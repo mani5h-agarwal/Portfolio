@@ -21,7 +21,7 @@
     "new": "node starter/create.mjs",
     "starter:update": "node starter/update.mjs",
     "deps:update": "npx --yes npm-check-updates -u && npm install && npm run check && npm run build",
-    "resume": "tectonic resume/resume.tex --outdir public"
+    "resume": "tectonic resume/resume.tex --outdir public && tectonic resume/resume-dark.tex --outdir public"
   },
   "dependencies": {
     "react": "^19.3.1",

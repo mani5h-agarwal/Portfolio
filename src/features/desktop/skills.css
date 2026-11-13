@@ -1,0 +1,1162 @@
+/* ─────────────── Skills app (Skills.tsx): a Finder window ─────────────── */
+
+/* the whole window is Finder: no reading column, no padding, no page scroll */
+.fs-app[data-app='skills'] .fs-body {
+  display: flex;
+  overflow: hidden;
+}
+
+.fs-app[data-app='skills'] .mac-content {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.finder {
+  display: grid;
+  grid-template-columns: clamp(230px, 18vw, 270px) minmax(0, 1fr);
+  height: 100%;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+/* ── sidebar: a floating glass pane, as in macOS 26 ── */
+
+.finder-side {
+  margin: 10px 0 10px 10px;
+  padding: 10px 8px;
+  overflow: auto;
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.045);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+}
+
+.finder-side h4 {
+  margin: 10px 10px 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--mac-secondary);
+}
+
+.finder-side h4:first-child {
+  margin-top: 2px;
+}
+
+.finder-side ul {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.finder-side li {
+  min-width: 0;
+}
+
+.finder-side button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.86rem;
+  text-align: left;
+  color: var(--mac-label);
+  background: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.finder-side button:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+
+.finder-side button[aria-current] {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.side-icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  color: #3d9bff;
+}
+
+.side-tag {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.25);
+}
+
+.side-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-count {
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 0.35);
+}
+
+/* ── the main pane: toolbar, the skills, the path bar ── */
+
+.finder-main {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.finder-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 6px 18px;
+}
+
+/* Liquid Glass capsules */
+.glass-group {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.07);
+  box-shadow:
+    inset 0 0.5px 0 rgb(255 255 255 / 0.18),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.08),
+    0 2px 8px rgb(0 0 0 / 0.25);
+}
+
+.glass-group button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: var(--mac-label);
+  background: none;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.glass-group button:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.glass-group button:disabled {
+  color: rgb(255 255 255 / 0.25);
+  cursor: default;
+}
+
+.finder-views button[aria-pressed='true'] {
+  background: rgb(255 255 255 / 0.16);
+}
+
+.finder-place {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.95rem !important;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--mac-label) !important;
+}
+
+.finder-search {
+  gap: 6px;
+  width: clamp(150px, 16vw, 220px);
+  padding: 0 12px;
+  color: var(--mac-secondary);
+  cursor: text;
+}
+
+.finder-search:focus-within {
+  box-shadow:
+    inset 0 0.5px 0 rgb(255 255 255 / 0.18),
+    0 0 0 3px rgb(10 132 255 / 0.55);
+}
+
+.finder-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--mac-label);
+  background: none;
+}
+
+.finder-search input::placeholder {
+  color: var(--mac-secondary);
+}
+
+.finder-search input::-webkit-search-cancel-button {
+  filter: invert(1) opacity(0.5);
+}
+
+.finder-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+  padding: clamp(8px, 2vh, 24px) clamp(18px, 3vw, 44px);
+}
+
+/* both views start at the top, as in Finder */
+.finder-content[data-view='list'] {
+  padding-top: 4px;
+}
+
+.finder-empty {
+  margin: auto;
+  color: var(--mac-secondary);
+}
+
+/* the path bar and the item count, as at the bottom of a Finder window */
+.finder-path {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 28px;
+  padding: 0 16px;
+  border-top: 1px solid var(--mac-separator);
+  font-size: 0.72rem;
+  color: var(--mac-secondary);
+  white-space: nowrap;
+}
+
+.finder-path ol {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.finder-path li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.finder-path li + li::before {
+  content: '›';
+  margin: 0 7px;
+  opacity: 0.6;
+}
+
+.finder-path li:last-child {
+  color: var(--mac-label);
+}
+
+.finder-path span {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── icon view: the skills grouped by category ── */
+
+.skill-groups {
+  display: grid;
+  gap: clamp(14px, 3.4vh, 34px);
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+}
+
+/* a group's heading, with a hairline under it, like Finder's "Use Groups" */
+.skill-group h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 clamp(10px, 1.8vh, 16px);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--mac-separator);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--mac-label);
+}
+
+.skill-group h3 span {
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.35);
+}
+
+/* nine across, so the biggest group (9) fits one row and the rows line up */
+.skill-folders {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: clamp(8px, 1.6vh, 14px) 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ── one skill: a folder with its logo on the front, its name under it ── */
+
+.skill-folder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(4px, 0.8vh, 8px);
+  min-width: 0;
+  animation: folder-pop 0.55s cubic-bezier(0.3, 1.45, 0.5, 1) calc(var(--n) * 30ms) both;
+}
+
+/* the whole folder is a button that opens its Quick Look */
+.skill-folder button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: inherit;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+}
+
+.skill-folder button:focus-visible {
+  outline: none;
+}
+
+.skill-folder button:focus-visible .skill-folder-name {
+  border-radius: 4px;
+  background: #0a64d0;
+}
+
+/* the open one is what Quick Look zoomed out of: it steps back while previewed */
+/* (the folder or the list row itself: an ancestor of the app has its own data-open) */
+.skill-folder[data-open] .skill-folder-icon,
+.finder-list tr[data-open] .skill-folder-icon {
+  opacity: 0.35;
+}
+
+.skill-folder-icon {
+  position: relative;
+  display: block;
+  flex: none;
+  /* as big as the window's height allows, never wider than its column */
+  width: min(100%, clamp(60px, 12vh, 120px));
+  aspect-ratio: 400 / 320;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.35));
+  transition: transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.skill-folder:hover .skill-folder-icon {
+  transform: translateY(-3px) scale(1.08);
+}
+
+.folder-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* macOS folder blue: the back (with its tab) a shade deeper than the front */
+.folder-back {
+  fill: #3d8fd8;
+}
+
+.folder-front {
+  fill: #62b0f4;
+}
+
+.folder-edge {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.4);
+  stroke-width: 3;
+}
+
+/* Pointing at a folder opens its front flap a little (it pivots on its bottom edge), the way a
+   folder looks just before you open it: a hint that clicking shows what's inside. */
+.folder-front,
+.folder-edge {
+  transform-box: view-box;
+  transform-origin: 50% 314px;
+  transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.skill-folder:hover .folder-front,
+.skill-folder:hover .folder-edge {
+  transform: scaleY(0.86);
+}
+
+/* the logo, straight on the folder's front: no tile behind it */
+.skill-folder-icon img {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 40%;
+  height: 50%;
+  object-fit: contain;
+  translate: -50% -50%;
+  filter: drop-shadow(0 1px 1.5px rgb(0 30 70 / 0.35));
+  pointer-events: none;
+  transition: translate 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+/* dark logos (MySQL, Expo…) get a soft light halo so they read on the blue */
+.skill-folder-icon[data-dark] img {
+  filter: drop-shadow(0 0 1px rgb(255 255 255 / 0.9)) drop-shadow(0 0 4px rgb(255 255 255 / 0.55));
+}
+
+.skill-folder:hover .skill-folder-icon img {
+  translate: -50% -38%;
+}
+
+.skill-folder-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 1px 4px;
+  font-size: clamp(0.68rem, 1.35vh, 0.8rem);
+  font-weight: 500;
+  color: var(--mac-label);
+}
+
+.skill-folder-name > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Finder's tag dots: small, overlapping, each ringed in the window's colour */
+.tag-dots {
+  display: inline-flex;
+  flex: none;
+}
+
+.tag-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--mac-window);
+}
+
+.tag-dots i + i {
+  margin-left: -3px;
+}
+
+/* ── list view: Name, Kind, Tags, Used in ── */
+
+.finder-list {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.finder-list thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0 10px 6px;
+  border-bottom: 1px solid var(--mac-separator);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-align: left;
+  color: var(--mac-secondary);
+  background: var(--mac-window);
+}
+
+.finder-list-group th {
+  padding: clamp(5px, 1.2vh, 14px) 10px 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: left;
+  color: var(--mac-label);
+}
+
+.finder-list-group span {
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.35);
+}
+
+.finder-list tr[data-skill] {
+  cursor: pointer;
+  animation: row-in 0.35s ease-out calc(var(--n) * 14ms) both;
+}
+
+.finder-list tr[data-skill]:nth-child(even) td {
+  background: rgb(255 255 255 / 0.03);
+}
+
+.finder-list tr[data-skill]:hover td {
+  background: rgb(255 255 255 / 0.07);
+}
+
+.finder-list tr[data-skill]:focus-visible {
+  outline: none;
+}
+
+.finder-list tr[data-skill]:focus-visible td {
+  color: #fff;
+  background: #0a64d0;
+}
+
+.finder-list td {
+  height: clamp(19px, 2.75vh, 30px);
+  padding: 0 10px;
+  color: var(--mac-secondary);
+  white-space: nowrap;
+}
+
+.finder-list td:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.finder-list td:last-child {
+  border-radius: 0 6px 6px 0;
+  white-space: normal;
+}
+
+.finder-list .finder-list-name {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: clamp(19px, 2.75vh, 30px);
+  font-weight: 500;
+  color: var(--mac-label);
+}
+
+.finder-list-name .skill-folder-icon {
+  width: 24px;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.35));
+}
+
+.finder-list .tag-dots {
+  margin-right: 7px;
+  vertical-align: -0.5px;
+}
+
+.finder-dim {
+  color: rgb(255 255 255 / 0.25) !important;
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* Folders gliding to their new places when the sidebar, search or view changes */
+::view-transition-group(*) {
+  animation-duration: 0.38s;
+  animation-timing-function: cubic-bezier(0.3, 1.1, 0.4, 1);
+}
+
+/* narrow screens: no sidebar, and the folders wrap */
+@media (max-width: 760px) {
+  .finder {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .finder-side,
+  .finder-views,
+  .finder-path ol {
+    display: none;
+  }
+
+  .skill-folders {
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  }
+}
+
+/* ───────────────────────── Quick Look (QuickLook.tsx) ───────────────────────── */
+
+.ql-backdrop {
+  /* Quick Look's theme: macOS dark mode's greys (as every app), with the home page's rose,
+     peach and violet (from the Mac's wallpaper) for the code. */
+  --ql-bg: var(--mac-window);
+  --ql-bar: var(--mac-titlebar);
+  --ql-code-bg: var(--mac-window);
+  --ql-out-bg: #181818;
+  --ql-line: var(--mac-separator);
+  --ql-text: rgb(255 255 255 / 0.88);
+  --ql-dim: rgb(255 255 255 / 0.5);
+  --ql-rose: #ec8fa9;
+  --ql-peach: #ffc3a0;
+  --ql-violet: #b4a6ff;
+  --ql-sky: #9fc9ff;
+  --ql-mint: #9fdcc8;
+  --ql-gold: #f2d38e;
+  --ql-ok: #8fd6a8;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  /* barely dimmed, as on a Mac: the folders stay visible behind it */
+  background: rgb(0 0 0 / 0.16);
+  animation: ql-fade 0.25s ease-out both;
+}
+
+.ql-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(760px, 100%);
+  max-height: min(640px, 100%);
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--ql-bg);
+  box-shadow:
+    0 0 0 0.5px rgb(255 255 255 / 0.16),
+    0 30px 80px rgb(0 0 0 / 0.6);
+  transform-origin: 50% 50%;
+}
+
+/* the title bar: close, the file's name and icon, and ‹ n / 24 › */
+.ql-bar {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--ql-bar);
+  border-bottom: 1px solid rgb(0 0 0 / 0.4);
+}
+
+.ql-close {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ff5f57;
+  cursor: pointer;
+}
+
+.ql-title {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  translate: -50% 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e5e5ea;
+  white-space: nowrap;
+}
+
+.ql-title img {
+  width: 16px;
+  height: 16px;
+}
+
+.ql-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #8e8e93;
+}
+
+.ql-nav button {
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: #d1d1d6;
+  background: rgb(255 255 255 / 0.08);
+  cursor: pointer;
+}
+
+.ql-nav button:hover {
+  background: rgb(255 255 255 / 0.16);
+}
+
+.ql-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+}
+
+.ql-main {
+  display: grid;
+  min-height: 0;
+}
+
+.ql-main.has-render {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+
+/* beside a live preview the code has less room: a touch smaller */
+.ql-main.has-render .ql-code {
+  font-size: 0.8rem;
+}
+
+/* ── the code: Xcode's dark theme, lines sliding in one by one ── */
+
+.ql-code {
+  margin: 0;
+  padding: 16px 0;
+  overflow: auto;
+  font:
+    0.84rem/1.65 ui-monospace,
+    'SF Mono',
+    Menlo,
+    monospace;
+  color: var(--ql-text);
+  background: var(--ql-code-bg);
+  tab-size: 4;
+}
+
+.ql-line {
+  display: flex;
+  animation: ql-line-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) calc(120ms + var(--i) * 45ms) both;
+}
+
+.ql-ln {
+  flex: none;
+  width: 3.2em;
+  padding-right: 1.2em;
+  text-align: right;
+  color: #5c5c66;
+  user-select: none;
+}
+
+.ql-panel .ql-code code {
+  /* plain: none of the inline-code chip styling used elsewhere */
+  padding: 0;
+  border-radius: 0;
+  font: inherit;
+  white-space: pre;
+  background: none;
+}
+
+.tk-keyword {
+  color: var(--ql-rose);
+  font-weight: 600;
+}
+
+.tk-string {
+  color: var(--ql-peach);
+}
+
+.tk-number {
+  color: var(--ql-gold);
+}
+
+.tk-comment {
+  color: var(--ql-dim);
+  font-style: italic;
+}
+
+.tk-type {
+  color: var(--ql-violet);
+}
+
+.tk-func {
+  color: var(--ql-mint);
+}
+
+.tk-tag {
+  color: var(--ql-violet);
+}
+
+.tk-deco {
+  color: var(--ql-peach);
+}
+
+.tk-prop {
+  color: var(--ql-sky);
+}
+
+/* ── what it does: a terminal, a table, or a live render beside the code ── */
+
+.ql-term {
+  flex: none;
+  padding: 14px 18px;
+  font:
+    0.82rem/1.7 ui-monospace,
+    'SF Mono',
+    Menlo,
+    monospace;
+  color: var(--ql-dim);
+  background: var(--ql-out-bg);
+  border-top: 1px solid var(--ql-line);
+}
+
+.ql-term > div {
+  white-space: pre-wrap;
+  animation: ql-line-in 0.3s ease-out calc(200ms + var(--i) * 70ms) both;
+}
+
+.ql-term-out {
+  color: var(--ql-text);
+}
+
+.ql-prompt {
+  color: var(--ql-rose);
+}
+
+.ql-table-wrap {
+  flex: none;
+  padding: 14px 18px;
+  background: var(--ql-out-bg);
+  border-top: 1px solid var(--ql-line);
+  animation: ql-line-in 0.35s ease-out calc(200ms + var(--i) * 70ms) both;
+}
+
+.ql-table {
+  border-collapse: collapse;
+  font:
+    0.8rem/1.5 ui-monospace,
+    'SF Mono',
+    Menlo,
+    monospace;
+  color: #e5e5ea;
+}
+
+.ql-table th,
+.ql-table td {
+  padding: 4px 18px 4px 0;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ql-table th {
+  font-weight: 600;
+  color: #8e8e93;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.ql-render {
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background:
+    radial-gradient(70% 60% at 50% 40%, rgb(236 143 169 / 0.08), transparent), var(--ql-out-bg);
+  border-left: 1px solid var(--ql-line);
+  animation: ql-render-in 0.5s cubic-bezier(0.3, 1.3, 0.5, 1) calc(150ms + var(--i) * 45ms) both;
+}
+
+/* an IDE's build status, or Postman's request, above the code */
+.ql-build {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  font-size: 0.78rem;
+  color: #a1a1a8;
+  background: var(--ql-bar);
+  border-bottom: 1px solid rgb(0 0 0 / 0.35);
+}
+
+.ql-build-ok {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #10241a;
+  background: var(--ql-ok);
+}
+
+.ql-req {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 14px 0;
+  padding: 6px 6px 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  background: var(--ql-bar);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+.ql-req-method {
+  font-weight: 700;
+  color: var(--ql-ok);
+}
+
+.ql-req-url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #e5e5ea;
+}
+
+.ql-req-send {
+  padding: 5px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #fff;
+  background: #ff6c37;
+}
+
+/* a Kaggle notebook: cells with their output */
+.ql-notebook {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.ql-cell {
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  animation: ql-line-in 0.4s ease-out calc(150ms + var(--i) * 70ms) both;
+}
+
+.ql-cell-in {
+  display: flex;
+  background: var(--ql-code-bg);
+}
+
+.ql-cell-label {
+  flex: none;
+  padding: 16px 0 0 12px;
+  font:
+    0.78rem ui-monospace,
+    Menlo,
+    monospace;
+  color: var(--ql-rose);
+}
+
+.ql-cell-in .ql-code {
+  flex: 1;
+  padding: 12px 0;
+}
+
+.ql-cell-out {
+  padding: 10px 16px;
+  font:
+    0.8rem ui-monospace,
+    Menlo,
+    monospace;
+  color: #e5e5ea;
+  background: var(--ql-out-bg);
+}
+
+.ql-empty {
+  padding: 40px;
+  text-align: center;
+  color: #8e8e93;
+}
+
+/* ── the little rendered results: a phone, a browser ── */
+
+.ql-phone {
+  position: relative;
+  width: 168px;
+  aspect-ratio: 9 / 19;
+  padding: 7px;
+  border-radius: 30px;
+  background: #0a0a0c;
+  box-shadow:
+    0 0 0 2px #3a3a40,
+    0 20px 40px rgb(0 0 0 / 0.5);
+}
+
+.ql-phone-island {
+  position: absolute;
+  top: 13px;
+  left: 50%;
+  z-index: 1;
+  width: 54px;
+  height: 15px;
+  border-radius: 999px;
+  translate: -50% 0;
+  background: #000;
+}
+
+.ql-phone-screen {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  border-radius: 24px;
+  color: #111;
+  background: #fff;
+}
+
+.ql-r-ios {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  font-size: 1.05rem;
+}
+
+.ql-r-globe {
+  font-size: 1.6rem;
+}
+
+.ql-r-rn {
+  font-size: 1.15rem;
+}
+
+.ql-r-android {
+  font:
+    500 1.05rem Roboto,
+    system-ui,
+    sans-serif;
+}
+
+.ql-browser {
+  width: min(100%, 300px);
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 0.45);
+}
+
+.ql-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 10px;
+  background: #ececef;
+}
+
+.ql-browser-bar i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c8c8cd;
+}
+
+.ql-browser-bar span {
+  flex: 1;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 0.66rem;
+  color: #6e6e73;
+  background: #fff;
+}
+
+.ql-browser-page {
+  min-height: 170px;
+  padding: 18px;
+  color: #111;
+}
+
+.ql-r-h1 {
+  margin: 0 0 6px;
+  font:
+    700 1.5rem 'Times New Roman',
+    serif;
+}
+
+.ql-r-p {
+  margin: 0;
+  font:
+    0.9rem 'Times New Roman',
+    serif;
+}
+
+.ql-r-center {
+  display: grid;
+  place-items: center;
+  min-height: 134px;
+}
+
+.ql-r-pill {
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #ff8a5c, #e8508f);
+  box-shadow: 0 10px 30px #e8508f55;
+}
+
+.ql-r-button {
+  padding: 8px 14px;
+  border: 1px solid #c7c7cc;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #f5f5f7;
+}
+
+.ql-r-tw {
+  padding: 12px 24px;
+  border-radius: 16px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  background: #0ea5e9;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+}
+
+@keyframes ql-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ql-line-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes ql-render-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.92);
+  }
+}
+
+@keyframes folder-pop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.8);
+  }
+}
+
+/* a narrow window: as many as fit */
+@media (max-width: 860px) {
+  .skill-folders {
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-folder,
+  .ql-backdrop,
+  .ql-line,
+  .ql-term > div,
+  .ql-table-wrap,
+  .ql-render,
+  .ql-cell {
+    animation: none;
+  }
+}
