@@ -1,5 +1,6 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { portfolio } from '@/config/portfolio'
+import { asset } from '@/lib/asset'
 import { profile } from '@/config/profile'
 import { CompanyLogo } from './CompanyLogo'
 import { skillLogo } from './skillIcons'
@@ -121,7 +122,7 @@ function ProfileWidget() {
       <header className="wg-me-head">
         {profile.photo && (
           <span className="wg-avatar">
-            <img src={profile.photo} alt={profile.name} />
+            <img src={asset(profile.photo)} alt={profile.name} />
           </span>
         )}
         <div>

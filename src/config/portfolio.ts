@@ -1,6 +1,8 @@
 // Everything shown in the Mac's apps (About, Experience, Projects, Skills, Contact, Résumé).
 // Entries marked EXAMPLE are placeholders showing the format: replace them with your own.
 
+import { asset } from '@/lib/asset'
+
 export interface Job {
   company: string
   role: string
@@ -202,7 +204,7 @@ export const portfolio = {
         website: 'https://mani5h-agarwal.github.io/SwiftShareX/',
       },
       accent: '#9b6bff',
-      icon: { src: '/projects/swiftsharex/icon.webp' },
+      icon: { src: asset('/projects/swiftsharex/icon.webp') },
       how: {
         lanes: [
           {
@@ -229,15 +231,18 @@ export const portfolio = {
         },
       },
       screens: [
-        { src: '/projects/swiftsharex/1.webp', caption: 'Send, or receive' },
-        { src: '/projects/swiftsharex/2.webp', caption: 'Looking for a device to send to' },
-        { src: '/projects/swiftsharex/3.webp', caption: 'Waiting to receive' },
-        { src: '/projects/swiftsharex/4.webp', caption: 'A device found nearby, over UDP' },
-        { src: '/projects/swiftsharex/5.webp', caption: 'Connected, ready to send' },
-        { src: '/projects/swiftsharex/6.webp', caption: 'The receiving side' },
-        { src: '/projects/swiftsharex/7.webp', caption: 'Confirm before sending' },
-        { src: '/projects/swiftsharex/8.webp', caption: 'Sent, and confirmed by the receiver' },
-        { src: '/projects/swiftsharex/9.webp', caption: 'Receiving, with live progress' },
+        { src: asset('/projects/swiftsharex/1.webp'), caption: 'Send, or receive' },
+        { src: asset('/projects/swiftsharex/2.webp'), caption: 'Looking for a device to send to' },
+        { src: asset('/projects/swiftsharex/3.webp'), caption: 'Waiting to receive' },
+        { src: asset('/projects/swiftsharex/4.webp'), caption: 'A device found nearby, over UDP' },
+        { src: asset('/projects/swiftsharex/5.webp'), caption: 'Connected, ready to send' },
+        { src: asset('/projects/swiftsharex/6.webp'), caption: 'The receiving side' },
+        { src: asset('/projects/swiftsharex/7.webp'), caption: 'Confirm before sending' },
+        {
+          src: asset('/projects/swiftsharex/8.webp'),
+          caption: 'Sent, and confirmed by the receiver',
+        },
+        { src: asset('/projects/swiftsharex/9.webp'), caption: 'Receiving, with live progress' },
       ],
     },
     {
@@ -261,7 +266,7 @@ export const portfolio = {
       ],
       links: { github: 'https://github.com/mani5h-agarwal/SmartGalleryX' },
       accent: '#7e90ff',
-      icon: { src: '/projects/smartgallery/icon.webp' },
+      icon: { src: asset('/projects/smartgallery/icon.webp') },
       screens: 'smartgallery',
       how: {
         lanes: [
@@ -307,16 +312,16 @@ export const portfolio = {
       ],
       links: { github: 'https://github.com/mani5h-agarwal/Bondly' },
       accent: '#a47aff',
-      icon: { src: '/projects/bondly/icon.webp' },
+      icon: { src: asset('/projects/bondly/icon.webp') },
       screens: [
-        { src: '/projects/bondly/1.webp', caption: 'Your bonds' },
-        { src: '/projects/bondly/2.webp', caption: 'Real-time chat' },
-        { src: '/projects/bondly/3.webp', caption: 'Moments, as swipeable cards' },
-        { src: '/projects/bondly/4.webp', caption: 'The clans you’re in' },
-        { src: '/projects/bondly/5.webp', caption: 'A clan’s group chat' },
-        { src: '/projects/bondly/6.webp', caption: 'The side menu' },
-        { src: '/projects/bondly/7.webp', caption: 'Your profile' },
-        { src: '/projects/bondly/8.webp', caption: 'Bond requests: accept or decline' },
+        { src: asset('/projects/bondly/1.webp'), caption: 'Your bonds' },
+        { src: asset('/projects/bondly/2.webp'), caption: 'Real-time chat' },
+        { src: asset('/projects/bondly/3.webp'), caption: 'Moments, as swipeable cards' },
+        { src: asset('/projects/bondly/4.webp'), caption: 'The clans you’re in' },
+        { src: asset('/projects/bondly/5.webp'), caption: 'A clan’s group chat' },
+        { src: asset('/projects/bondly/6.webp'), caption: 'The side menu' },
+        { src: asset('/projects/bondly/7.webp'), caption: 'Your profile' },
+        { src: asset('/projects/bondly/8.webp'), caption: 'Bond requests: accept or decline' },
       ],
       how: {
         lanes: [
@@ -362,7 +367,7 @@ export const portfolio = {
         'Tuned it to run smoothly on **low-end laptops**: targeted style writes, paused animations when hidden, and a lighter rain on slow machines.',
       ],
       // the site's own address, wherever it's hosted
-      links: { github: 'https://github.com/mani5h-agarwal/Portfolio', website: '/' },
+      links: { github: 'https://github.com/mani5h-agarwal/Portfolio', website: asset('/') },
       accent: '#0a84ff',
       icon: { colors: ['#2c2c2e', '#0d0d0f'], glyph: 'mark' },
       how: {
@@ -388,11 +393,14 @@ export const portfolio = {
       },
       device: 'mac',
       screens: [
-        { src: '/projects/portfolio/1.webp', caption: 'The home page' },
-        { src: '/projects/portfolio/2.webp', caption: 'Scrolled: the MacBook, open' },
-        { src: '/projects/portfolio/3.webp', caption: 'Skills: a Finder window' },
-        { src: '/projects/portfolio/4.webp', caption: 'Experience: every role on a timeline' },
-        { src: '/projects/portfolio/5.webp', caption: 'About Me: a wall of widgets' },
+        { src: asset('/projects/portfolio/1.webp'), caption: 'The home page' },
+        { src: asset('/projects/portfolio/2.webp'), caption: 'Scrolled: the MacBook, open' },
+        { src: asset('/projects/portfolio/3.webp'), caption: 'Skills: a Finder window' },
+        {
+          src: asset('/projects/portfolio/4.webp'),
+          caption: 'Experience: every role on a timeline',
+        },
+        { src: asset('/projects/portfolio/5.webp'), caption: 'About Me: a wall of widgets' },
       ],
     },
   ] satisfies Project[],
@@ -463,5 +471,5 @@ export const portfolio = {
   },
 
   /** Put your résumé at public/resume.pdf (or link elsewhere). Leave empty to show a note. */
-  resumeUrl: '/resume.pdf',
+  resumeUrl: asset('/resume.pdf'),
 }

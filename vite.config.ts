@@ -4,6 +4,8 @@ import { defineConfig } from 'vitest/config'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // where the site is served from: '/' locally; the deploy workflow sets e.g. '/Portfolio/'
+  base: process.env.BASE_PATH ?? '/',
   plugins: [react()],
   resolve: {
     alias: {
